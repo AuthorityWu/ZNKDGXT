@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intelligent_express_cabinets.demo.dao.OrdersMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.Orders">
+        <id column="order_id" property="orderId" />
+        <result column="user_id" property="userId" />
+        <result column="send_address" property="sendAddress" />
+        <result column="send_name" property="sendName" />
+        <result column="send_tel" property="sendTel" />
+        <result column="receive_address" property="receiveAddress" />
+        <result column="receive_name" property="receiveName" />
+        <result column="receive_tel" property="receiveTel" />
+        <result column="order_code" property="orderCode" />
+        <result column="order_type" property="orderType" />
+        <result column="order_company" property="orderCompany" />
+        <result column="order_status" property="orderStatus" />
+        <result column="order_start_time" property="orderStartTime" />
+        <result column="order_end_time" property="orderEndTime" />
+        <result column="express_number" property="expressNumber" />
+        <result column="expressman_tel" property="expressmanTel" />
+        <result column="box_size" property="boxSize" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_id, user_id, send_address, send_name, send_tel, receive_addres, receive_name, receive_tel, order_code, order_type, order_company, order_status, order_start_time, order_end_time, express_number, expressman_tel, box_size
+    </sql>
+
+</mapper>

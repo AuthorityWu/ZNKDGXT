@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intelligent_express_cabinets.demo.dao.MissionsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.Missions">
+        <id column="mission_id" property="missionId" />
+        <result column="mission_type" property="missionType" />
+        <result column="operator_id" property="operatorId" />
+        <result column="locker_id" property="lockerId" />
+        <result column="mission_content" property="missionContent" />
+        <result column="mission_urgency" property="missionUrgency" />
+        <result column="mission_start_time" property="missionStartTime" />
+        <result column="mission_end_data" property="missionEndData" />
+        <result column="mission_status" property="missionStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        mission_id, mission_type, operator_id, locker_id, mission_content, mission_urgency, mission_start_time, mission_end_data, mission_status
+    </sql>
+
+
+</mapper>

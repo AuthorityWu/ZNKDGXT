@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intelligent_express_cabinets.demo.dao.LockersMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.Lockers">
+        <id column="locker_id" property="lockerId" />
+        <result column="locker_type_id" property="lockerTypeId" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="big_box_able_number" property="bigBoxAbleNumber" />
+        <result column="middle_box_able_number" property="middleBoxAbleNumber" />
+        <result column="small_box_able_number" property="smallBoxAbleNumber" />
+        <result column="locker_status" property="lockerStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        locker_id, locker_type_id, longitude, latitude, big_box_able_number, middle_box_able_number, small_box_able_number, locker_status
+    </sql>
+
+</mapper>

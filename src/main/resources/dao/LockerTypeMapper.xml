@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intelligent_express_cabinets.demo.dao.LockerTypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.LockerType">
+        <id column="locker_type_id" property="lockerTypeId" />
+        <result column="locker_type_name" property="lockerTypeName" />
+        <result column="big_box_number" property="bigBoxNumber" />
+        <result column="middle_box_number" property="middleBoxNumber" />
+        <result column="small_box_number" property="smallBoxNumber" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        locker_type_id, locker_type_name, big_box_number, middle_box_number, small_box_number
+    </sql>
+
+</mapper>

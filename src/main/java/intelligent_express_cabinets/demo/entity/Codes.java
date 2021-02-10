@@ -1,0 +1,42 @@
+package intelligent_express_cabinets.demo.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("codes")
+@ApiModel(value="Codes对象", description="")
+public class Codes implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "主键id自增")
+    @TableId(value = "code_id", type = IdType.AUTO)
+    private Integer codeId;
+
+    @ApiModelProperty(value = "订单ID 外键 int")
+    @TableField("order_id")
+    private Integer orderId;
+
+    @ApiModelProperty(value = "柜子id（注意不是柜机中的柜子编号）")
+    @TableField("box_id")
+    private Integer boxId;
+
+    @ApiModelProperty(value = "状态* int (1.未绑定  2.已绑定  0.解绑定（注销))")
+    @TableField("code_status")
+    private Integer codeStatus;
+
+
+}

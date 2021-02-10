@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intelligent_express_cabinets.demo.dao.BoxesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.Boxes">
+        <id column="box_id" property="boxId" />
+        <result column="locker_id" property="lockerId" />
+        <result column="locker_box_id" property="lockerBoxId" />
+        <result column="box_size" property="boxSize" />
+        <result column="box_status" property="boxStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        box_id, locker_id, locker_box_id, box_size, box_status
+    </sql>
+
+</mapper>

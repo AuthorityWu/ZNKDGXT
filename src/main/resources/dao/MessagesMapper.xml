@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intelligent_express_cabinets.demo.dao.MessagesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.Messages">
+        <id column="message_id" property="messageId" />
+        <result column="message_type" property="messageType" />
+        <result column="send_id" property="sendId" />
+        <result column="receive_id" property="receiveId" />
+        <result column="message_status" property="messageStatus" />
+        <result column="message_content" property="messageContent" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        message_id, message_type, send_id, receive_id, message_status, message_content
+    </sql>
+
+</mapper>
