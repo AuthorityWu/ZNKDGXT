@@ -1,12 +1,62 @@
 package intelligent_express_cabinets.demo.controller;
 
 
+import intelligent_express_cabinets.demo.entity.Result;
+import intelligent_express_cabinets.demo.entity.ResultResponse;
+import intelligent_express_cabinets.demo.entity.Roles;
+import intelligent_express_cabinets.demo.service.impl.RolesServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/roles")
 public class RolesController {
+    @Autowired
+    RolesServiceImpl rolesService;
 
+    @RequestMapping("/findAll")
+    public Result findAll(){
+
+        List<Roles> RolesList=rolesService.list();
+        return ResultResponse.success(RolesList);
+    }
+
+    @RequestMapping("/findById")
+    public Result findById(@RequestParam String id){
+        Roles data=rolesService.getById(id);
+        if (data!=null){
+            return ResultResponse.success(data);
+        }else return ResultResponse.notFound();
+    }
+
+    @RequestMapping("/insert")
+    public Result insert(Roles data){
+        if (rolesService.getById(data.getRoleId())!=null){
+            return ResultResponse.fail("资源已存在");
+        }
+        if (rolesService.save(data)) {
+            return ResultResponse.success();
+        }
+        else return ResultResponse.fail("添加不成功");
+    }
+
+    @RequestMapping("/update")
+    public Result update(Roles data){
+        if (rolesService.getById(data.getRoleId())!=null){
+            if (rolesService.saveOrUpdate(data)) {
+                return ResultResponse.success();
+            } else return ResultResponse.fail("更新不成功");
+        }else return ResultResponse.notFound();
+    }
+    @RequestMapping("/deleteById")
+    public Result deleteById(@RequestParam String id){
+        if (rolesService.removeById(id)){
+            return ResultResponse.success();
+        }else return ResultResponse.fail("删除失败");
+    }
 }
