@@ -29,8 +29,8 @@ public class UsersController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Users data=usersService.getById(id);
+    public Result findById(@RequestParam String userId){
+        Users data=usersService.getById(userId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -38,9 +38,7 @@ public class UsersController {
 
     @RequestMapping("/insert")
     public Result insert(Users data){
-        if (usersService.getById(data.getUserId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (usersService.save(data)) {
             return ResultResponse.success();
         }
@@ -56,8 +54,8 @@ public class UsersController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (usersService.removeById(id)){
+    public Result deleteById(@RequestParam String userId){
+        if (usersService.removeById(userId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

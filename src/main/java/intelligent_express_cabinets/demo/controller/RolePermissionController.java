@@ -27,8 +27,8 @@ public class RolePermissionController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        RolePermission data= rolePermissionService.getById(id);
+    public Result findById(@RequestParam String rolePermissionId){
+        RolePermission data= rolePermissionService.getById(rolePermissionId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -36,9 +36,7 @@ public class RolePermissionController {
 
     @RequestMapping("/insert")
     public Result insert(RolePermission data){
-        if (rolePermissionService.getById(data.getRolePermissionId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (rolePermissionService.save(data)) {
             return ResultResponse.success();
         }
@@ -54,8 +52,8 @@ public class RolePermissionController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (rolePermissionService.removeById(id)){
+    public Result deleteById(@RequestParam String rolePermissionId){
+        if (rolePermissionService.removeById(rolePermissionId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

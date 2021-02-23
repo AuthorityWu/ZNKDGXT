@@ -5,6 +5,7 @@ package intelligent_express_cabinets.demo.entity;
  */
 public class ResultResponse {
     private static final String DEFAULT_SUCCESS_MESSAGE = "SUCCESS";
+    private static final String DEFAULT_NOT_FOUND_MESSAGE = "NOT FOUND";
     // 只返回状态
      public static Result success() {
          return new Result()
@@ -27,7 +28,8 @@ public class ResultResponse {
     // 未找到
     public static Result notFound() {
         return new Result()
-                .setCode(ResultCode.NOT_FOUND);
+                .setCode(ResultCode.NOT_FOUND)
+                .setMessage(DEFAULT_NOT_FOUND_MESSAGE);
     }
 
 }

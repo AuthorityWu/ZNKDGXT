@@ -1,7 +1,6 @@
 package intelligent_express_cabinets.demo.controller;
 
 
-import intelligent_express_cabinets.demo.dao.BoxesMapper;
 import intelligent_express_cabinets.demo.entity.Boxes;
 import intelligent_express_cabinets.demo.entity.Result;
 import intelligent_express_cabinets.demo.entity.ResultResponse;
@@ -15,8 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/boxes")
 public class BoxesController {
-    @Autowired
-    private BoxesMapper boxesMapper;
+
     @Autowired
     private BoxesServiceImpl boxesService;
 
@@ -28,8 +26,8 @@ public class BoxesController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Boxes data=boxesService.getById(id);
+    public Result findById(@RequestParam String boxId){
+        Boxes data=boxesService.getById(boxId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -37,9 +35,6 @@ public class BoxesController {
 
     @RequestMapping("/insert")
     public Result insert(Boxes data){
-        if (boxesService.getById(data.getBoxId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
         if (boxesService.save(data)) {
             return ResultResponse.success();
         }
@@ -55,10 +50,46 @@ public class BoxesController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (boxesService.removeById(id)){
+    public Result deleteById(@RequestParam String boxId){
+        if (boxesService.removeById(boxId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }
+
+    @RequestMapping("/useBox")
+    public Result useBox(@RequestParam Integer LockerId,@RequestParam Integer lockerBoxId,@RequestParam Integer codeId){
+        try {
+            Boxes boxes=boxesService.findByLocker(LockerId,lockerBoxId);
+            boxesService.bindCode(boxes,codeId);
+            boxesService.useBox(boxes);
+        }catch (Exception e){
+            return ResultResponse.fail(e.getLocalizedMessage());
+        }
+        return ResultResponse.success();
+    }
+    @RequestMapping("/unUseBox")
+    public Result unUseBox(@RequestParam Integer LockerId,@RequestParam Integer lockerBoxId){
+        try {
+            Boxes boxes=boxesService.findByLocker(LockerId,lockerBoxId);
+            boxesService.unBindCode(boxes);
+            boxesService.unUseBox(boxes);
+        }catch (Exception e){
+            return ResultResponse.fail(e.getLocalizedMessage());
+        }
+        return ResultResponse.success();
+    }
+
+    @RequestMapping("/reportBroken")
+    public Result reportBroken(@RequestParam Integer LockerId,@RequestParam Integer lockerBoxId){
+        try {
+            Boxes boxes=boxesService.findByLocker(LockerId,lockerBoxId);
+            boxesService.reportBroken(boxes);
+        }catch (Exception e){
+            return ResultResponse.fail(e.getLocalizedMessage());
+        }
+        return ResultResponse.success();
+    }
+
+
 
 }

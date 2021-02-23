@@ -27,8 +27,8 @@ public class UserRoleController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        UserRole data= userRoleService.getById(id);
+    public Result findById(@RequestParam String userRoleId){
+        UserRole data= userRoleService.getById(userRoleId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -36,9 +36,7 @@ public class UserRoleController {
 
     @RequestMapping("/insert")
     public Result insert(UserRole data){
-        if (userRoleService.getById(data.getUserRoleId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (userRoleService.save(data)) {
             return ResultResponse.success();
         }
@@ -54,8 +52,8 @@ public class UserRoleController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (userRoleService.removeById(id)){
+    public Result deleteById(@RequestParam String userRoleId){
+        if (userRoleService.removeById(userRoleId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

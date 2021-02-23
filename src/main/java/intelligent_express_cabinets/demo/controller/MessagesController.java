@@ -30,8 +30,8 @@ public class MessagesController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Messages data=messagesService.getById(id);
+    public Result findById(@RequestParam String messageId){
+        Messages data=messagesService.getById(messageId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -39,9 +39,7 @@ public class MessagesController {
 
     @RequestMapping("/insert")
     public Result insert(Messages data){
-        if (messagesService.getById(data.getMessageId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (messagesService.save(data)) {
             return ResultResponse.success();
         }
@@ -57,8 +55,8 @@ public class MessagesController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (messagesService.removeById(id)){
+    public Result deleteById(@RequestParam String messageId){
+        if (messagesService.removeById(messageId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

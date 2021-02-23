@@ -2,7 +2,6 @@ package intelligent_express_cabinets.demo.controller;
 
 
 import intelligent_express_cabinets.demo.entity.LockerType;
-import intelligent_express_cabinets.demo.entity.LockerType;
 import intelligent_express_cabinets.demo.entity.Result;
 import intelligent_express_cabinets.demo.entity.ResultResponse;
 import intelligent_express_cabinets.demo.service.impl.LockerTypeServiceImpl;
@@ -29,8 +28,8 @@ public class LockerTypeController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        LockerType data=lockerTypeService.getById(id);
+    public Result findById(@RequestParam String lockerTypeId){
+        LockerType data=lockerTypeService.getById(lockerTypeId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -38,9 +37,7 @@ public class LockerTypeController {
 
     @RequestMapping("/insert")
     public Result insert(LockerType data){
-        if (lockerTypeService.getById(data.getLockerTypeId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (lockerTypeService.save(data)) {
             return ResultResponse.success();
         }
@@ -56,9 +53,11 @@ public class LockerTypeController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (lockerTypeService.removeById(id)){
+    public Result deleteById(@RequestParam String lockerTypeId){
+        if (lockerTypeService.removeById(lockerTypeId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }
+
+
 }

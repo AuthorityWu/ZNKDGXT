@@ -28,8 +28,8 @@ public class MissionsController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Missions data=missionsService.getById(id);
+    public Result findById(@RequestParam String missionId){
+        Missions data=missionsService.getById(missionId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -37,9 +37,7 @@ public class MissionsController {
 
     @RequestMapping("/insert")
     public Result insert(Missions data){
-        if (missionsService.getById(data.getMissionId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (missionsService.save(data)) {
             return ResultResponse.success();
         }
@@ -55,8 +53,8 @@ public class MissionsController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (missionsService.removeById(id)){
+    public Result deleteById(@RequestParam String missionId){
+        if (missionsService.removeById(missionId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

@@ -27,8 +27,8 @@ public class PermissionsController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Permissions data=permissionsService.getById(id);
+    public Result findById(@RequestParam String permissionId){
+        Permissions data=permissionsService.getById(permissionId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -36,9 +36,7 @@ public class PermissionsController {
 
     @RequestMapping("/insert")
     public Result insert(Permissions data){
-        if (permissionsService.getById(data.getPermissionId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (permissionsService.save(data)) {
             return ResultResponse.success();
         }
@@ -54,8 +52,8 @@ public class PermissionsController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (permissionsService.removeById(id)){
+    public Result deleteById(@RequestParam String permissionId){
+        if (permissionsService.removeById(permissionId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

@@ -28,8 +28,8 @@ public class CodesController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Codes data=codesService.getById(id);
+    public Result findById(@RequestParam String codeId){
+        Codes data=codesService.getById(codeId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -37,9 +37,6 @@ public class CodesController {
 
     @RequestMapping("/insert")
     public Result insert(Codes data){
-        if (codesService.getById(data.getCodeId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
         if (codesService.save(data)) {
             return ResultResponse.success();
         }
@@ -55,9 +52,17 @@ public class CodesController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (codesService.removeById(id)){
+    public Result deleteById(@RequestParam String codeId){
+        if (codesService.removeById(codeId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
+    }
+
+    @RequestMapping("/getNotUsed")
+    public Result getNotUsed(){
+        Codes data=codesService.getNotUsed();
+        if (data!=null){
+            return ResultResponse.success(data);
+        }else return ResultResponse.notFound();
     }
 }

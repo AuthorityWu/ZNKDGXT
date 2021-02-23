@@ -1,7 +1,6 @@
 package intelligent_express_cabinets.demo.controller;
 
 
-import intelligent_express_cabinets.demo.entity.Codes;
 import intelligent_express_cabinets.demo.entity.Lockers;
 import intelligent_express_cabinets.demo.entity.Result;
 import intelligent_express_cabinets.demo.entity.ResultResponse;
@@ -29,8 +28,8 @@ public class LockersController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Lockers data=lockersService.getById(id);
+    public Result findById(@RequestParam String lockerId){
+        Lockers data=lockersService.getById(lockerId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -38,9 +37,7 @@ public class LockersController {
 
     @RequestMapping("/insert")
     public Result insert(Lockers data){
-        if (lockersService.getById(data.getLockerId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (lockersService.save(data)) {
             return ResultResponse.success();
         }
@@ -56,9 +53,20 @@ public class LockersController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (lockersService.removeById(id)){
+    public Result deleteById(@RequestParam String lockerId){
+        if (lockersService.removeById(lockerId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
+    }
+
+
+    @RequestMapping("/createByLockerType")
+    public Result createByLockerType(@RequestParam Integer lockerTypeId,@RequestParam Float longitude,@RequestParam Float latitude){
+        try {
+            lockersService.createByLockerType(lockerTypeId,longitude,latitude);
+        }catch (Exception e){
+            return ResultResponse.fail(e.getLocalizedMessage());
+        }
+        return ResultResponse.success();
     }
 }

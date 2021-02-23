@@ -30,8 +30,8 @@ public class OrdersController {
     }
 
     @RequestMapping("/findById")
-    public Result findById(@RequestParam String id){
-        Orders data=ordersService.getById(id);
+    public Result findById(@RequestParam String orderId){
+        Orders data=ordersService.getById(orderId);
         if (data!=null){
             return ResultResponse.success(data);
         }else return ResultResponse.notFound();
@@ -39,14 +39,22 @@ public class OrdersController {
 
     @RequestMapping("/insert")
     public Result insert(Orders data){
-        if (ordersService.getById(data.getOrderId())!=null){
-            return ResultResponse.fail("资源已存在");
-        }
+
         if (ordersService.save(data)) {
             return ResultResponse.success();
         }
         else return ResultResponse.fail("添加不成功");
     }
+    @RequestMapping("/CreateNewOrder")
+    public Result CreateNewOrder(Orders data){
+
+        ordersService.bindNotUsedCode(data);
+        if (ordersService.save(data)) {
+            return ResultResponse.success();
+        }
+        else return ResultResponse.fail("添加不成功");
+    }
+
 
     @RequestMapping("/update")
     public Result update(Orders data){
@@ -57,8 +65,8 @@ public class OrdersController {
         }else return ResultResponse.notFound();
     }
     @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String id){
-        if (ordersService.removeById(id)){
+    public Result deleteById(@RequestParam String orderId){
+        if (ordersService.removeById(orderId)){
             return ResultResponse.success();
         }else return ResultResponse.fail("删除失败");
     }

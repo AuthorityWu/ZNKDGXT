@@ -10,7 +10,7 @@ public enum ResultCode {
     FAIL(400),//失败
     UNAUTHORIZED(401),//未认证（签名错误）
     FORBIDDEN(403),//禁止访问
-    NOT_FOUND(404),//接口不存在
+    NOT_FOUND(404),//资源不存在
     INTERNAL_SERVER_ERROR(500);//服务器内部错误
 
     public int code;
