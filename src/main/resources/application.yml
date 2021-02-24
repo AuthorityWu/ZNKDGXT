@@ -1,13 +1,9 @@
 spring:
-  profiles:
-    active: dev
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/intelligent_express_cabinet?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
-    password: root
+    password: root123456*
     hikari:
       #数据库连接池j
       pool-name: DateHikariCP
@@ -26,12 +22,32 @@ spring:
       #测试连接是否可用的查询语句
       connection-test-query: SELECT 1
 
+  redis:
+    #超时时间
+    timeout: 10000ms
+    #服务器地址
+    host: 127.0.0.1
+    #服务器端口
+    port: 6379
+    #数据库
+    database: 0
+    lettuce:
+      pool:
+        #最大连接数，默认8
+        max-active: 1024
+        #最大连接阻塞等待时间，默认-1
+        max-wait: 10000ms
+        #最大空闲连接
+        max-idle: 200
+        #最小空闲连接
+        min-idle: 5
+
 #Mybatis-plus配置
 mybatis-plus:
   #配置Mapper映射文件
   mapper-locations: classpath*:/dao/*Mapper.xml
   #配置Mybatis数据返回类型别名（默认别名是类名）
-  type-aliases-package: css.springboot.project02.demo.entity
+  type-aliases-package: intelligent_express_cabinet.demo.entity
   configuration:
     #自动驼峰命名
     map-underscore-to-camel-case: false
@@ -41,3 +57,14 @@ mybatis-plus:
 logging:
   level:
     css.springboot.project02.demo.dao: debug
+
+
+jwt:
+  #JWT存储的请求头
+  tokenHeader: Authorization
+  #JWT加解密使用的密匙
+  secret: yeb-secret
+  #JWT的超期限时间（60*60*24）
+  expiration: 604800
+  #JWT负载拿到开头
+  tokenHead: Bearer
