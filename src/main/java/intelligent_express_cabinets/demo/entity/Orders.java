@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -67,16 +68,18 @@ public class Orders implements Serializable {
     @TableField("order_company")
     private String orderCompany;
 
-    @ApiModelProperty(value = "状态* int  1.待存件 2.待取件 3.完成 4.已取消 5.订单不可见（会员删除，管理员可见）0.注销")
+    @ApiModelProperty(value = "状态* int  1.待存件 2.待取件 3.完成 4.已取消 5.订单不可见（会员删除，管理员可见）6.等待专员处理 0.注销")
     @TableField("order_status")
     private Integer orderStatus;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("order_start_time")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private LocalDateTime orderStartTime;
 
     @ApiModelProperty(value = "完成时间")
     @TableField("order_end_time")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private LocalDateTime orderEndTime;
 
     @ApiModelProperty(value = "运单编号 条件：订单类型为2 string")

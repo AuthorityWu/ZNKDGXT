@@ -26,7 +26,7 @@ public class Messages implements Serializable {
     @TableId(value = "message_id", type = IdType.AUTO)
     private Integer messageId;
 
-    @ApiModelProperty(value = "消息类型* int  1.寄件消息 2.取件消息 3.批量任务分配消息 4.取件失败反馈消息 5.抱怨投诉反馈消息 6.反馈的答复消息 7.取消订单消息")
+    @ApiModelProperty(value = "消息类型* int  1.寄件消息 2.取件消息 3.取件失败反馈消息 4.抱怨投诉反馈消息 5.反馈的答复消息 6.取消订单消息")
     @TableField("message_type")
     private Integer messageType;
 

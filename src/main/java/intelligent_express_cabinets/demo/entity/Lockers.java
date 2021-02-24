@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 @Data
@@ -31,10 +32,10 @@ public class Lockers implements Serializable {
     private Integer lockerTypeId;
 
     @ApiModelProperty(value = "经度")
-    private Float longitude;
+    private String longitude;
 
     @ApiModelProperty(value = "纬度")
-    private Float latitude;
+    private String latitude;
 
     @ApiModelProperty(value = "大柜子可用数量 int")
     @TableField("big_box_able_number")
@@ -52,5 +53,8 @@ public class Lockers implements Serializable {
     @TableField("locker_status")
     private Integer lockerStatus;
 
+    @ApiModelProperty(value = "柜机中的柜子")
+    @TableField(exist = false)
+    private List<Boxes> boxes;
 
 }

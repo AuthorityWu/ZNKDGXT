@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 @Data
@@ -38,5 +39,12 @@ public class Permissions implements Serializable {
     @TableField("permission_parent_id")
     private Integer permissionParentId;
 
+    @ApiModelProperty(value = "子菜单")
+    @TableField(exist = false)
+    private List<Permissions> children;
+
+    @ApiModelProperty(value = "角色列表")
+    @TableField(exist = false)
+    private List<Roles> roles;
 
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -49,10 +50,12 @@ public class Missions implements Serializable {
 
     @ApiModelProperty(value = "生成日期 date")
     @TableField("mission_start_time")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private LocalDateTime missionStartTime;
 
     @ApiModelProperty(value = "结束日期 date")
     @TableField("mission_end_data")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
     private LocalDateTime missionEndData;
 
     @ApiModelProperty(value = "状态* int   1.未接收 2.已接收 3.完成 4.任务不可见(专柜员删除，管理员可见)")
