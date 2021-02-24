@@ -1,62 +1,80 @@
 package intelligent_express_cabinets.demo.controller;
 
 
-import intelligent_express_cabinets.demo.entity.Orders;
-import intelligent_express_cabinets.demo.entity.Result;
-import intelligent_express_cabinets.demo.entity.ResultResponse;
+import intelligent_express_cabinets.demo.common.returnBean;
+import intelligent_express_cabinets.demo.entity.UserRole;
 import intelligent_express_cabinets.demo.entity.Users;
-import intelligent_express_cabinets.demo.service.impl.OrdersServiceImpl;
-import intelligent_express_cabinets.demo.service.impl.UsersServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import intelligent_express_cabinets.demo.service.IUserRoleService;
+import intelligent_express_cabinets.demo.service.IUsersService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.annotation.Resource;
+import java.security.Principal;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping
 public class UsersController {
-    @Autowired
-    UsersServiceImpl usersService;
 
-    @RequestMapping("/findAll")
-    public Result findAll(){
+    @Resource
+    private IUsersService usersService;
 
-        List<Users> OrdersList=usersService.list();
-        return ResultResponse.success(OrdersList);
-    }
+    @Resource
+    private IUserRoleService userRoleService;
 
-    @RequestMapping("/findById")
-    public Result findById(@RequestParam String userId){
-        Users data=usersService.getById(userId);
-        if (data!=null){
-            return ResultResponse.success(data);
-        }else return ResultResponse.notFound();
-    }
-
-    @RequestMapping("/insert")
-    public Result insert(Users data){
-
-        if (usersService.save(data)) {
-            return ResultResponse.success();
+    @ApiOperation(value = "新用户注册")
+    @PostMapping("/register")
+    public returnBean userRegister(@RequestBody Users users){
+        Users user = usersService.getUserByUsername(users.getUsername());
+        if (user==null){
+            //先把用户输入的明文密码进行加密
+            PasswordEncoder pe = new BCryptPasswordEncoder();
+            String encode = pe.encode(users.getPassword());
+            users.setPassword(encode);
+            users.setUserStatus(0);
+            Boolean booleans = usersService.save(users);
+            if (booleans==true){
+                Users user1 = usersService.getUserByUsername(users.getUsername());
+                Integer userId = user1.getUserId();
+                UserRole userRole = new UserRole();
+                userRole.setUserId(userId);
+                userRole.setRoleId(2);
+                Boolean bool= userRoleService.save(userRole);
+                if (bool=true){
+                    return returnBean.success("新用户注册成功!");
+                }
+                else {
+                    return returnBean.error("新用户注册失败!");
+                }
+            }
         }
-        else return ResultResponse.fail("添加不成功");
+        return returnBean.error("此新用户的账号已经存在!");
     }
 
-    @RequestMapping("/update")
-    public Result update(Users data){
-        if (usersService.getById(data.getUserId())!=null){
-            if (usersService.saveOrUpdate(data)) {
-                return ResultResponse.success();
-            } else return ResultResponse.fail("更新不成功");
-        }else return ResultResponse.notFound();
+    @ApiOperation(value = "获取当前登录用户的信息")
+    @GetMapping("/user/info")
+    public Users getCustomerInfo(Principal principal){
+        if(null==principal){
+            return null;
+        }
+        String username = principal.getName();
+        Users users = usersService.getUserByUsername(username);
+        users.setRoles(usersService.getRoles(users.getUserId()));
+        users.setPassword(null);
+        return users;
     }
-    @RequestMapping("/deleteById")
-    public Result deleteById(@RequestParam String userId){
-        if (usersService.removeById(userId)){
-            return ResultResponse.success();
-        }else return ResultResponse.fail("删除失败");
+
+    @ApiOperation(value = "更新会员的个人信息")
+    @PutMapping("/update/member/message")
+    public returnBean updateMembers(@RequestBody Users users){
+        if (usersService.updateById(users)){
+            return returnBean.success("更新成功!");
+        }
+        return returnBean.error("更新失败!");
     }
+
+
 }
