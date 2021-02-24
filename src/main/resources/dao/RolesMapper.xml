@@ -9,9 +9,28 @@
         <result column="role_description" property="roleDescription" />
     </resultMap>
 
+    <!--自定义ManyRoles返回样式-->
+    <resultMap id="ManyRoles" type="intelligent_express_cabinets.demo.entity.Roles" extends="BaseResultMap">
+        <id column="id" property="roleId"/>
+        <result column="rname" property="roleName" />
+        <result column="rdescription" property="roleDescription" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         role_id, role_name, role_description
     </sql>
+
+    <select id="getRoles" resultMap="ManyRoles">
+        SELECT
+            r.role_id AS id,
+            r.role_name AS rname,
+            r.role_description AS rdescription
+        FROM
+            roles AS r
+                LEFT JOIN user_role AS ur ON r.role_id=ur.role_id
+        WHERE
+            ur.user_id=#{userId}
+    </select>
 
 </mapper>

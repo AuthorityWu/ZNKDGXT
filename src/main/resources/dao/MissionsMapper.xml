@@ -15,10 +15,109 @@
         <result column="mission_status" property="missionStatus" />
     </resultMap>
 
+    <!--自定义missions返回样式-->
+    <resultMap id="missions" type="intelligent_express_cabinets.demo.entity.Missions" extends="BaseResultMap">
+        <id column="mid" property="missionId"/>
+        <result column="mty" property="missionType" />
+        <result column="oid" property="operatorId" />
+        <result column="lid" property="lockerId" />
+        <result column="mco" property="missionContent" />
+        <result column="mur" property="missionUrgency" />
+        <result column="mst" property="missionStartTime" />
+        <result column="med" property="missionEndData" />
+        <result column="sta" property="missionStatus" />
+    </resultMap>
+
+    <!--自定义missionsA返回样式-->
+    <resultMap id="missionsA" type="intelligent_express_cabinets.demo.entity.Missions" extends="BaseResultMap">
+        <id column="mid1" property="missionId"/>
+        <result column="mty1" property="missionType" />
+        <result column="oid1" property="operatorId" />
+        <result column="lid1" property="lockerId" />
+        <result column="mco1" property="missionContent" />
+        <result column="mur1" property="missionUrgency" />
+        <result column="mst1" property="missionStartTime" />
+        <result column="med1" property="missionEndData" />
+        <result column="sta1" property="missionStatus" />
+    </resultMap>
+
+    <!--自定义missionsB返回样式-->
+    <resultMap id="missionsB" type="intelligent_express_cabinets.demo.entity.Missions" extends="BaseResultMap">
+        <id column="mid2" property="missionId"/>
+        <result column="mty2" property="missionType" />
+        <result column="oid2" property="operatorId" />
+        <result column="lid2" property="lockerId" />
+        <result column="mco2" property="missionContent" />
+        <result column="mur2" property="missionUrgency" />
+        <result column="mst2" property="missionStartTime" />
+        <result column="med2" property="missionEndData" />
+        <result column="sta2" property="missionStatus" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         mission_id, mission_type, operator_id, locker_id, mission_content, mission_urgency, mission_start_time, mission_end_data, mission_status
     </sql>
+
+    <select id="getMissionsByNotReceive" resultMap="missions">
+        SELECT
+            m.mission_id AS mid,
+            m.mission_type AS mty,
+            m.operator_id AS oid,
+            m.locker_id AS lid,
+            m.mission_content AS mco,
+            m.mission_urgency AS mur,
+            m.mission_start_time AS mst,
+            m.mission_end_data AS med,
+            m.mission_status AS sta
+        from
+            missions m
+        WHERE
+            m.mission_status!=4
+          AND
+            m.mission_status=1
+        ORDER BY m.mission_id
+    </select>
+
+    <select id="getMissionsByReceive" resultMap="missionsA">
+        SELECT
+            m.mission_id AS mid1,
+            m.mission_type AS mty1,
+            m.operator_id AS oid1,
+            m.locker_id AS lid1,
+            m.mission_content AS mcon1,
+            m.mission_urgency AS mur1,
+            m.mission_start_time AS mst1,
+            m.mission_end_data AS med1,
+            m.mission_status AS sta1
+        from
+            missions m
+        WHERE
+            m.mission_status!=4
+           AND
+            m.mission_status=2
+        ORDER BY m.mission_id
+    </select>
+
+    <select id="getMissionsByFinishReceive" resultMap="missionsB">
+        SELECT
+            m.mission_id AS mid2,
+            m.mission_type AS mty2,
+            m.operator_id AS oid2,
+            m.locker_id AS lid2,
+            m.mission_content AS mcon2,
+            m.mission_urgency AS mur2,
+            m.mission_start_time AS mst2,
+            m.mission_end_data AS med2,
+            m.mission_status AS sta2
+        from
+            missions m
+        WHERE
+            m.mission_status!=4
+           AND
+            m.mission_status=3
+        ORDER BY m.mission_id
+    </select>
 
 
 </mapper>

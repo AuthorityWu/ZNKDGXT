@@ -5,16 +5,16 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="intelligent_express_cabinets.demo.entity.Users">
         <id column="user_id" property="userId" />
-        <result column="user_account" property="userAccount" />
-        <result column="user_password" property="userPassword" />
-        <result column="user_name" property="userName" />
+        <result column="user_account" property="username" />
+        <result column="user_password" property="password" />
+        <result column="user_name" property="userRealName" />
         <result column="user_address" property="userAddress" />
         <result column="user_status" property="userStatus" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id, user_account, user_password, user_name, user_address, user_status
+        user_id, username, password, user_real_name, user_address, user_status
     </sql>
 
 </mapper>

@@ -12,9 +12,38 @@
         <result column="message_content" property="messageContent" />
     </resultMap>
 
+    <!--自定义messages返回样式-->
+    <resultMap id="messages" type="intelligent_express_cabinets.demo.entity.Messages" extends="BaseResultMap">
+        <id column="mid" property="messageId"/>
+        <result column="mty" property="messageType" />
+        <result column="mst" property="messageStatus" />
+        <result column="mco" property="messageContent" />
+        <result column="sid" property="sendId" />
+        <result column="rid" property="receiveId" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         message_id, message_type, send_id, receive_id, message_status, message_content
     </sql>
+
+    <select id="getMessages" resultMap="messages">
+        SELECT
+            m.message_id AS mid,
+            m.message_type AS mty,
+            m.message_status AS mst,
+            m.message_content AS mco,
+            m.send_id AS sid,
+            m.receive_id AS rid
+        from
+            messages m
+        WHERE
+            m.message_status!=2
+           AND
+            m.send_id=#{userId}
+           OR
+            m.receive_id=#{userId}
+        ORDER BY m.message_id
+    </select>
 
 </mapper>

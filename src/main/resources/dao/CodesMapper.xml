@@ -8,11 +8,33 @@
         <result column="order_id" property="orderId" />
         <result column="box_id" property="boxId" />
         <result column="code_status" property="codeStatus" />
+        <result column="locker_id" property="lockerId" />
+    </resultMap>
+
+    <!--自定义Codess返回样式-->
+    <resultMap id="Codess" type="intelligent_express_cabinets.demo.entity.Codes" extends="BaseResultMap">
+        <id column="id" property="codeId"/>
+        <result column="rid" property="orderId" />
+        <result column="bid" property="boxId" />
+        <result column="sid" property="codeStatus" />
+        <result column="lid" property="lockerId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
+
     <sql id="Base_Column_List">
-        code_id, order_id, box_id, code_status
+        code_id, order_id, box_id, code_status ,locker_id
     </sql>
+
+    <select id="getByMaxId" resultMap="Codess">
+        select
+            MAX(code_id) AS id,
+            c.order_id AS rid,
+            c.box_id AS bid,
+            c.code_status AS sid,
+            c.locker_id AS lid
+        from
+            codes AS c
+    </select>
 
 </mapper>

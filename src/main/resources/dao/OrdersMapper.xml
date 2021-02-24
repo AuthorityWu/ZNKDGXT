@@ -23,9 +23,33 @@
         <result column="box_size" property="boxSize" />
     </resultMap>
 
+    <!--自定义orders返回样式-->
+    <resultMap id="orders" type="intelligent_express_cabinets.demo.entity.Orders" extends="BaseResultMap">
+        <id column="oid" property="orderId"/>
+        <result column="uid" property="userId" />
+        <result column="com" property="orderCompany" />
+        <result column="times" property="orderStartTime" />
+        <result column="exp" property="expressmanTel" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         order_id, user_id, send_address, send_name, send_tel, receive_addres, receive_name, receive_tel, order_code, order_type, order_company, order_status, order_start_time, order_end_time, express_number, expressman_tel, box_size
     </sql>
+
+    <select id="getOrdersByUserId" resultMap="orders">
+        SELECT
+            o.order_id AS oid,
+            o.user_id AS uid,
+            o.order_company AS com,
+            o.order_start_time AS times,
+            o.expressman_tel AS exp
+        from
+            orders o
+        WHERE
+            o.user_id=#{userId}
+          AND
+            o.order_status!=5
+    </select>
 
 </mapper>

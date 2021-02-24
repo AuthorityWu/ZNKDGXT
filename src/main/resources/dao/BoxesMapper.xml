@@ -11,9 +11,34 @@
         <result column="box_status" property="boxStatus" />
     </resultMap>
 
+    <!--自定义boxes返回样式-->
+    <resultMap id="boxes" type="intelligent_express_cabinets.demo.entity.Boxes" extends="BaseResultMap">
+        <id column="bid" property="boxId"/>
+        <result column="lid" property="lockerId" />
+        <result column="lbd" property="lockerBoxId" />
+        <result column="bsi" property="boxSize" />
+        <result column="bst" property="boxStatus" />
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         box_id, locker_id, locker_box_id, box_size, box_status
     </sql>
+
+    <select id="getByLockerIdBoxId" resultMap="boxes">
+        SELECT
+            b.box_id AS bid,
+            b.locker_id AS lid,
+            b.locker_box_id AS lbd,
+            b.box_size AS bsi,
+            b.box_status AS bst
+        from
+            boxes b
+        WHERE
+            b.locker_id=#{lockerId}
+          AND
+            b.locker_box_id=#{boxId}
+        ORDER BY b.box_id
+    </select>
 
 </mapper>

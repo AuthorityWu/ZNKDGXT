@@ -10,9 +10,66 @@
         <result column="permission_parent_id" property="permissionParentId" />
     </resultMap>
 
+    <!--自定义Permissions返回样式-->
+    <resultMap id="Permissions" type="intelligent_express_cabinets.demo.entity.Permissions" extends="BaseResultMap">
+        <collection property="children" ofType="intelligent_express_cabinets.demo.entity.Permissions">
+            <id column="id2" property="permissionId" />
+            <result column="name2" property="permissionName" />
+            <result column="url2" property="permissionUrl" />
+            <result column="parentId2" property="permissionParentId" />
+        </collection>
+    </resultMap>
+
+    <!--自定义PermissionsWithRole返回样式-->
+    <resultMap id="PermissionsWithRole" type="intelligent_express_cabinets.demo.entity.Permissions" extends="BaseResultMap">
+        <collection property="roles" ofType="intelligent_express_cabinets.demo.entity.Roles">
+            <id column="id" property="roleId"/>
+            <result column="name" property="roleName" />
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         permission_id, permission_name, permission_url, permission_parent_id
     </sql>
+
+    <select id="getPermissionByUserId" resultMap="Permissions">
+        SELECT
+            DISTINCT
+            p1.*,
+            p2.permission_id AS id2,
+            p2.permission_url AS url2,
+            p2.`permission_name` AS name2,
+            p2.permission_parent_id AS parentId2
+        from
+            permissions p1,
+            permissions p2,
+            user_role ar,
+            role_permission rp
+        WHERE
+            p1.permission_id=p2.permission_parent_id
+          AND
+            p2.permission_id=rp.permission_id
+          AND
+            rp.role_id=ar.role_id
+          AND
+            ar.user_id=#{usersId}
+    </select>
+
+    <select id="getPermissionsWithRole" resultMap="PermissionsWithRole">
+        SELECT
+            p.*,
+            r.role_id AS id,
+            r.role_name AS name
+        FROM
+            permissions p,
+            role_permission rp,
+            roles r
+        WHERE
+            p.permission_id=rp.permission_id
+          AND
+            r.role_id=rp.role_id
+        ORDER BY p.permission_id
+    </select>
 
 </mapper>

@@ -14,9 +14,45 @@
         <result column="locker_status" property="lockerStatus" />
     </resultMap>
 
+    <!--自定义Lockers返回样式-->
+    <resultMap id="Lockers" type="intelligent_express_cabinets.demo.entity.Lockers" extends="BaseResultMap">
+        <id column="lid" property="lockerId"/>
+        <result column="ltid" property="lockerTypeId" />
+        <result column="lon" property="longitude" />
+        <result column="lat" property="latitude" />
+        <result column="lst" property="lockerStatus" />
+        <collection property="boxes" ofType="intelligent_express_cabinets.demo.entity.Boxes">
+            <id column="bid" property="boxId"/>
+            <result column="bids" property="lockerBoxId" />
+            <result column="bsi" property="boxSize" />
+            <result column="bst" property="boxStatus" />
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         locker_id, locker_type_id, longitude, latitude, big_box_able_number, middle_box_able_number, small_box_able_number, locker_status
     </sql>
+
+    <select id="getLockerBoxes" resultMap="Lockers">
+        SELECT
+            DISTINCT
+            l.locker_id AS lid,
+            l.locker_type_id AS ltid,
+            l.longitude AS lon,
+            l.latitude AS lat,
+            l.locker_status AS lst,
+            b.box_id AS bid,
+            b.locker_box_id AS bids,
+            b.box_size AS bsi,
+            b.box_status AS bst
+        from
+            lockers l,
+            boxes b
+        WHERE
+            l.locker_id=b.locker_id
+          AND
+            b.box_size=#{boxSize}
+    </select>
 
 </mapper>
