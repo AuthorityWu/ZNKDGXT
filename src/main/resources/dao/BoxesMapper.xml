@@ -37,7 +37,7 @@
         WHERE
             b.locker_id=#{lockerId}
           AND
-            b.locker_box_id=#{boxId}
+            b.locker_box_id=#{lockerBoxId}
         ORDER BY b.box_id
     </select>
 

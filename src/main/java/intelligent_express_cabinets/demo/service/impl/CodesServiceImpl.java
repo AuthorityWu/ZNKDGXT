@@ -3,8 +3,10 @@ package intelligent_express_cabinets.demo.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import intelligent_express_cabinets.demo.dao.CodesMapper;
+import intelligent_express_cabinets.demo.entity.Boxes;
 import intelligent_express_cabinets.demo.entity.Codes;
 import intelligent_express_cabinets.demo.entity.Orders;
+import intelligent_express_cabinets.demo.service.IBoxesService;
 import intelligent_express_cabinets.demo.service.ICodesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class CodesServiceImpl extends ServiceImpl<CodesMapper, Codes> implements
 
     @Autowired
     private CodesMapper codesMapper;
+    @Autowired
+    IBoxesService boxesService;
 
     @Override
     public Codes getByMaxId() {
@@ -24,5 +28,13 @@ public class CodesServiceImpl extends ServiceImpl<CodesMapper, Codes> implements
     @Override
     public Codes getCodeByOrderId(Integer orderId) {
         return codesMapper.selectOne(new QueryWrapper<Codes>().eq("order_id",orderId));
+    }
+
+    @Override
+    public Codes getByBox(Boxes boxes) {
+        QueryWrapper<Codes> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("locker_id",boxes.getLockerId())
+                .eq("box_id",boxes.getLockerBoxId());
+        return this.getOne(queryWrapper,false);
     }
 }

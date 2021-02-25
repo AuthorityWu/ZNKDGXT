@@ -62,6 +62,11 @@ public class OrdersController {
         Codes codes = codesService.getByMaxId();
         code = codes.getCodeId();
         code = code + 1;
+        /*
+        * （这里应该是寻找可用的code，没有code才新建吧）
+        *
+        * */
+
         orders.setOrderCode(code);
         if (ordersService.save(orders)){
             Map<String,Integer> orderMap = new HashMap<>();
@@ -178,7 +183,7 @@ public class OrdersController {
     }
 
     @ApiOperation(value = "根据id获取详细的订单信息")
-    @PostMapping("/get/orders/{orderId}")
+    @PostMapping("/get/orders/{orderId}")/*这里应该是用GET吧*/
     public returnBean addOrders(@PathVariable Integer orderId){
         Orders order = ordersService.getOrderByUserId(orderId);
         return returnBean.success("获取详细订单信息成功!",order);
@@ -207,7 +212,7 @@ public class OrdersController {
         Integer lockerId = codes.getLockerId();
         //设置柜机中柜子的状态为1:未使用（正常）
         Integer boxId = codes.getBoxId();
-        Boxes boxes = boxesService.getByLockerIdBoxId(lockerId,boxId);
+        Boxes boxes = boxesService.getByLockerIdLockerBoxId(lockerId,boxId);
         boxes.setBoxStatus(1);
         boxesService.updateById(boxes);
 
@@ -249,7 +254,7 @@ public class OrdersController {
         Integer lockerId = codes.getLockerId();
         //设置柜机中柜子的状态为1:未使用（正常）
         Integer boxId = codes.getBoxId();
-        Boxes boxes = boxesService.getByLockerIdBoxId(lockerId,boxId);
+        Boxes boxes = boxesService.getByLockerIdLockerBoxId(lockerId,boxId);
         boxes.setBoxStatus(1);
         boxesService.updateById(boxes);
 
