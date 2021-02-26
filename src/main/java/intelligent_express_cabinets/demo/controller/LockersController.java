@@ -4,6 +4,7 @@ package intelligent_express_cabinets.demo.controller;
 import intelligent_express_cabinets.demo.common.returnBean;
 import intelligent_express_cabinets.demo.entity.Boxes;
 import intelligent_express_cabinets.demo.entity.Codes;
+import intelligent_express_cabinets.demo.entity.Lockers;
 import intelligent_express_cabinets.demo.service.IBoxesService;
 import intelligent_express_cabinets.demo.service.ICodesService;
 import intelligent_express_cabinets.demo.service.ILockersService;
@@ -24,6 +25,15 @@ public class LockersController {
 @Autowired
     ILockersService lockersService;
 
+    @ApiOperation("获取所有柜机")
+    @GetMapping
+    public returnBean getAll(){
+        List<Lockers> lockersList=lockersService.list();
+        return returnBean.success("获取成功",lockersList);
+    }
+
+
+
     @ApiOperation("获取柜机的所有柜子")
     @GetMapping("{lockerId}/boxes")
     public returnBean getBoxes(@PathVariable Integer lockerId){
@@ -31,13 +41,15 @@ public class LockersController {
         return returnBean.success("成功",boxesList);
     }
 
-
+/*
     @ApiOperation("使用柜子")
     @PostMapping("{lockerId}/boxes/{LockerboxId}/use")
     public returnBean use(@PathVariable Integer lockerId,@PathVariable Integer LockerboxId, @RequestParam Integer codeId){
 
         Boxes boxes = boxesService.getByLockerIdLockerBoxId(lockerId, LockerboxId);
-        Codes codes=codesService.getById(codeId);
+        // codes=codesService.getById(codeId);
+
+        boxes.setBoxStatus(1);
 
         boxesService.bindCode(boxes,codes);
         codes.setCodeStatus(2);
@@ -46,8 +58,8 @@ public class LockersController {
         codesService.updateById(codes);
 
         return returnBean.success("柜子使用成功");
-    }
-
+    }*/
+/*
     @ApiOperation("柜子使用完毕")
     @PostMapping("{lockerId}/boxes/{LockerboxId}/notUse")
     public returnBean notUse(@PathVariable Integer lockerId,@PathVariable Integer LockerboxId, @RequestParam Integer codeId){
@@ -63,7 +75,7 @@ public class LockersController {
 
         return returnBean.success("柜子使用成功");
     }
-
+*/
     @ApiOperation("删除柜机（连带删除柜子）")
     @DeleteMapping("{lockerId}/delete")
     public returnBean delete(@PathVariable Integer lockerId){

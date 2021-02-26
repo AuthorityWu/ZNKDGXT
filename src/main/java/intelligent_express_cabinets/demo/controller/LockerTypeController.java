@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/locker-type")
@@ -30,7 +32,13 @@ public class LockerTypeController {
         return returnBean.success("获取成功",lockerTypeService.list());
     }
 
-
+    @ApiOperation(value = "通过柜机类型的获取同类柜子")
+    @GetMapping("/{lockerTypeId}/lockers")
+    public returnBean getLockerByLockerType(@PathVariable Integer lockerTypeId){
+        LockerType lockerType = lockerTypeService.getById(lockerTypeId);
+        List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
+        return returnBean.success("获取成功",lockersList);
+    }
 
 
 
@@ -53,6 +61,10 @@ public class LockerTypeController {
     @ApiOperation(value = "根据id删除柜机类型")
     @DeleteMapping("/delete/{lockerTypeId}")
     public returnBean delete(@PathVariable Integer lockerTypeId){
+        LockerType lockerType=lockerTypeService.getById(lockerTypeId);
+        List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
+        if(lockersList==null)
+            return returnBean.error("删除失败,仍有此类型柜机在使用中");
         if (lockerTypeService.removeById(lockerTypeId)){
             return returnBean.success("删除成功");
         }else return returnBean.error("删除失败");

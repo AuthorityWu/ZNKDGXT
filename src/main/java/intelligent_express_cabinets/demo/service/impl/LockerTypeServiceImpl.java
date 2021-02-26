@@ -1,5 +1,6 @@
 package intelligent_express_cabinets.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import intelligent_express_cabinets.demo.dao.LockerTypeMapper;
 import intelligent_express_cabinets.demo.entity.Boxes;
@@ -10,6 +11,8 @@ import intelligent_express_cabinets.demo.service.ILockerTypeService;
 import intelligent_express_cabinets.demo.service.ILockersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -58,5 +61,13 @@ public class LockerTypeServiceImpl extends ServiceImpl<LockerTypeMapper, LockerT
             boxesService.save(boxes);
         }
         return lockers;
+    }
+
+    @Override
+    public List<Lockers> getLockerByLockerType(LockerType lockerType) {
+        QueryWrapper<Lockers> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("locker_type_id",lockerType.getLockerTypeId());
+        return lockersService.list(queryWrapper);
+
     }
 }

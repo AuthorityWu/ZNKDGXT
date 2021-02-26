@@ -36,14 +36,14 @@ public class returnBean {
      * 失败返回结果（形参只有message）
      */
     public static returnBean error(String message){
-        return new returnBean(200,message,null);
+        return new returnBean(400,message,null);
     }
 
     /**
      * 失败返回结果（形参有message和object）
      */
     public static returnBean error(String message,Object object){
-        return new returnBean(200,message,object);
+        return new returnBean(400,message,object);
     }
 
 }
