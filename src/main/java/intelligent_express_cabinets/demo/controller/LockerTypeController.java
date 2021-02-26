@@ -59,7 +59,7 @@ public class LockerTypeController {
     }
 
     @ApiOperation(value = "根据id删除柜机类型")
-    @DeleteMapping("/delete/{lockerTypeId}")
+    @DeleteMapping("/{lockerTypeId}/delete")
     public returnBean delete(@PathVariable Integer lockerTypeId){
         LockerType lockerType=lockerTypeService.getById(lockerTypeId);
         List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
