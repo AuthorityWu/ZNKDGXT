@@ -53,6 +53,12 @@ public class LockerTypeController {
     @ApiOperation(value = "修改柜机类型")
     @PostMapping("/update")
     public returnBean updateLockerType(@RequestBody LockerType lockerType){
+
+        List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
+        if(lockersList!=null)
+            return returnBean.error("修改失败,仍有此类型柜机在使用中");
+
+
         if (lockerTypeService.updateById(lockerType)){
             return returnBean.success("修改成功");
         }else return returnBean.error("修改失败");
@@ -63,7 +69,7 @@ public class LockerTypeController {
     public returnBean delete(@PathVariable Integer lockerTypeId){
         LockerType lockerType=lockerTypeService.getById(lockerTypeId);
         List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
-        if(lockersList==null)
+        if(lockersList!=null)
             return returnBean.error("删除失败,仍有此类型柜机在使用中");
         if (lockerTypeService.removeById(lockerTypeId)){
             return returnBean.success("删除成功");
