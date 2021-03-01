@@ -22,19 +22,18 @@ public class PermissionsServiceImpl extends ServiceImpl<PermissionsMapper, Permi
     private PermissionsMapper permissionsMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,Object> redisTemplate;
 
     @Override
-    public List<Permissions> getPermissionByUserId() {
-        Integer usersId = ((Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
+    public List<Permissions> getPermissionByUserId(Integer userId) {
         ValueOperations<String,Object> valueOperations = redisTemplate.opsForValue();
         //从redis获取菜单数据
-        List<Permissions> permissions = (List<Permissions>) valueOperations.get("menu_"+usersId);
+        List<Permissions> permissions = (List<Permissions>) valueOperations.get("menu_"+ userId);
         //如果为空，去数据库获取数据
         if (CollectionUtils.isEmpty(permissions)){
-            permissions = permissionsMapper.getPermissionByUserId(usersId);
+            permissions = permissionsMapper.getPermissionByUserId(userId);
             //将数据设置到Redis中
-            valueOperations.set("menu_"+usersId,permissions);
+            valueOperations.set("menu_"+ userId,permissions);
         }
         return permissions;
     }

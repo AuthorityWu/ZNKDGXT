@@ -77,7 +77,7 @@ public class OrdersController {
     }
 
 
-    @ApiOperation(value = "确认存储货物")
+    @ApiOperation(value = "确认存储货物(逻辑可能会修改)")
     @GetMapping("/thing")
     public returnBean getThingInfo(){
         Integer index = 1;
@@ -171,7 +171,7 @@ public class OrdersController {
     }
 
     @ApiOperation(value = "获取当前会员的的所有订单信息")
-    @GetMapping("/member/orders")
+    @GetMapping("/getMine")
     public returnBean getOrders(Principal principal){
         if(null==principal){
             return null;
@@ -179,14 +179,21 @@ public class OrdersController {
         String username = principal.getName();
         Users users = usersService.getUserByUsername(username);
         List<Orders> orders = ordersService.getOrdersByUserId(users.getUserId());
-        return returnBean.success("获取所有订单信息成功!",orders);
+        return returnBean.success("获取当前会员的的所有订单信息!",orders);
     }
-
+/*
     @ApiOperation(value = "根据id获取详细的订单信息")
-    @PostMapping("/get/orders/{orderId}")/*这里应该是用GET吧*/
+    @PostMapping("{orderId}/get/orders/")
     public returnBean addOrders(@PathVariable Integer orderId){
         Orders order = ordersService.getOrderByUserId(orderId);
         return returnBean.success("获取详细订单信息成功!",order);
+    }
+*/
+    @ApiOperation(value = "获取所有订单")
+    @PostMapping()
+    public returnBean getAll(){
+        List<Orders> ordersList = ordersService.list();
+        return returnBean.success("获取所有订单!",ordersList);
     }
 
     @ApiOperation(value = "根据id删除订单信息")
@@ -199,7 +206,7 @@ public class OrdersController {
     }
 
     @ApiOperation(value = "取消订单")
-    @PostMapping("/cancel/orders/{orderId}")
+    @PostMapping("/cancel/{orderId}")
     public returnBean cancelOrders(@PathVariable Integer orderId){
         Orders order = ordersService.getById(orderId);
         Integer boxSize = order.getBoxSize();
@@ -241,7 +248,7 @@ public class OrdersController {
     }
 
     @ApiOperation(value = "已经取件")
-    @PostMapping("/finish/orders/{orderId}")
+    @PostMapping("/finish/{orderId}")
     public returnBean finishOrders(@PathVariable Integer orderId){
         Orders order = ordersService.getById(orderId);
         Integer boxSize = order.getBoxSize();

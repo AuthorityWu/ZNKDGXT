@@ -35,14 +35,14 @@ public class UsersController {
             String encode = pe.encode(users.getPassword());
             users.setPassword(encode);
             users.setUserStatus(0);
-            Boolean booleans = usersService.save(users);
-            if (booleans==true){
+            boolean booleans = usersService.save(users);
+            if (booleans){
                 Users user1 = usersService.getUserByUsername(users.getUsername());
                 Integer userId = user1.getUserId();
                 UserRole userRole = new UserRole();
                 userRole.setUserId(userId);
                 userRole.setRoleId(2);
-                Boolean bool= userRoleService.save(userRole);
+                boolean bool= userRoleService.save(userRole);
                 if (bool=true){
                     return returnBean.success("新用户注册成功!");
                 }
@@ -68,7 +68,7 @@ public class UsersController {
     }
 
     @ApiOperation(value = "更新会员的个人信息")
-    @PutMapping("/update/member/message")
+    @PutMapping("/user/update")
     public returnBean updateMembers(@RequestBody Users users){
         if (usersService.updateById(users)){
             return returnBean.success("更新成功!");

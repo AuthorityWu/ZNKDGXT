@@ -13,13 +13,13 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/locker-type")
+@RequestMapping("/lockerType")
 public class LockerTypeController {
     @Autowired
     ILockerTypeService lockerTypeService;
 
     @ApiOperation(value = "从柜机类型新建柜机")
-    @PostMapping("/{lockerTypeId}/createNewLocker")
+    @PostMapping("/createNewLocker/{lockerTypeId}")
     public returnBean createNewLocker(@PathVariable Integer lockerTypeId,@RequestParam String longitude,@RequestParam String latitude){
         Lockers lockers=lockerTypeService.createByLockerType(lockerTypeId,longitude,latitude);
         return returnBean.success("创建成功",lockers);
@@ -33,7 +33,7 @@ public class LockerTypeController {
     }
 
     @ApiOperation(value = "通过柜机类型的获取同类柜子")
-    @GetMapping("/{lockerTypeId}/lockers")
+    @GetMapping("/lockers/{lockerTypeId}")
     public returnBean getLockerByLockerType(@PathVariable Integer lockerTypeId){
         LockerType lockerType = lockerTypeService.getById(lockerTypeId);
         List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
@@ -65,7 +65,7 @@ public class LockerTypeController {
     }
 
     @ApiOperation(value = "根据id删除柜机类型")
-    @DeleteMapping("/{lockerTypeId}/delete")
+    @DeleteMapping("/delete/{lockerTypeId}")
     public returnBean delete(@PathVariable Integer lockerTypeId){
         LockerType lockerType=lockerTypeService.getById(lockerTypeId);
         List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);

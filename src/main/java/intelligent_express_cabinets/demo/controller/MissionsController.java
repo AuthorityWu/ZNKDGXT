@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/missions/basic")
+@RequestMapping("/missions")
 public class MissionsController {
 
     @Resource
@@ -27,14 +27,14 @@ public class MissionsController {
     }
 
     @ApiOperation(value = "获取所有任务信息(任务状态为已完成)")
-    @GetMapping("/finishReceives")
+    @GetMapping("/isFinished")
     public returnBean getMissionsByFinishReceive(){
         List<Missions> messages = missionsService.getMissionsByFinishReceive();
         return returnBean.success("获取所有任务信息成功!",messages);
     }
 
     @ApiOperation(value = "获取所有任务信息(任务状态为已接收)")
-    @GetMapping("/receives")
+    @GetMapping("/isReceived")
     public returnBean getMissionsByReceive(){
         List<Missions> messages = missionsService.getMissionsByReceive();
         return returnBean.success("获取所有任务信息成功!",messages);

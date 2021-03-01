@@ -35,7 +35,7 @@ public class LockersController {
 
 
     @ApiOperation("获取柜机的所有柜子")
-    @GetMapping("{lockerId}/boxes")
+    @GetMapping("/boxes/{lockerId}")
     public returnBean getBoxes(@PathVariable Integer lockerId){
         List<Boxes> boxesList = lockersService.getBoxByLockerId(lockerId);
         return returnBean.success("成功",boxesList);
@@ -77,7 +77,7 @@ public class LockersController {
     }
 */
     @ApiOperation("删除柜机（连带删除柜子）")
-    @DeleteMapping("{lockerId}/delete")
+    @DeleteMapping("/delete/{lockerId}")
     public returnBean delete(@PathVariable Integer lockerId){
         List<Boxes> boxesList = lockersService.getBoxByLockerId(lockerId);
         boolean isEmpty=true;

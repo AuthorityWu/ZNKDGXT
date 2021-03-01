@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface IPermissionsService extends IService<Permissions> {
 
-    List<Permissions> getPermissionByUserId();
+    List<Permissions> getPermissionByUserId(Integer userId);
 
     /**
      * 根据角色查询菜单列表
-     * @return
+     * @return 权限集合
      */
     List<Permissions> getPermissionsWithRole();
 
