@@ -25,7 +25,11 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     public List<Orders> getOrdersByUserId(Integer userId) {
-        return ordersMapper.getOrdersByUserId(userId);
+        QueryWrapper<Orders> queryWrapper=
+                new QueryWrapper<Orders>()
+                .eq("user_id",userId);
+        return this.list(queryWrapper);
+        //return ordersMapper.getOrdersByUserId(userId);
     }
 
     @Override

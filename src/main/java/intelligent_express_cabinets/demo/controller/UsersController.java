@@ -43,7 +43,7 @@ public class UsersController {
                 userRole.setUserId(userId);
                 userRole.setRoleId(2);
                 boolean bool= userRoleService.save(userRole);
-                if (bool=true){
+                if (bool==true){
                     return returnBean.success("新用户注册成功!");
                 }
                 else {
@@ -68,7 +68,7 @@ public class UsersController {
     }
 
     @ApiOperation(value = "更新会员的个人信息")
-    @PutMapping("/user/update")
+    @PostMapping ("/user/update")
     public returnBean updateMembers(@RequestBody Users users){
         if (usersService.updateById(users)){
             return returnBean.success("更新成功!");

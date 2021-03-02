@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("orders")
-@ApiModel(value="Orders对象", description="")
+@ApiModel(value="Orders对象", description="订单")
 public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,14 +73,16 @@ public class Orders implements Serializable {
     @TableField("order_status")
     private Integer orderStatus;
 
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间yyyy-MM-dd HH:mm:ss")
     @TableField("order_start_time")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderStartTime;
 
-    @ApiModelProperty(value = "完成时间")
+    @ApiModelProperty(value = "完成时间yyyy-MM-dd HH:mm:ss")
     @TableField("order_end_time")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "Asia/Shanghai")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderEndTime;
 
     @ApiModelProperty(value = "运单编号 条件：订单类型为2 string")

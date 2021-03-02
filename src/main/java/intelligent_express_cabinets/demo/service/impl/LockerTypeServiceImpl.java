@@ -26,6 +26,7 @@ public class LockerTypeServiceImpl extends ServiceImpl<LockerTypeMapper, LockerT
     public Lockers createByLockerType(Integer lockerTypeId,String longitude,String latitude){
         LockerType lockerType=this.getById(lockerTypeId);
         Lockers lockers=new Lockers();
+        lockers.setLockerTypeId(lockerTypeId);
         lockers.setLockerStatus(1);
         lockers.setLongitude(longitude);
         lockers.setLatitude(latitude);

@@ -18,7 +18,7 @@ public class CodesController {
     ICodesService codesService;
 
     @ApiOperation(value = "获取所有码")
-    @GetMapping
+    @GetMapping("")
     public returnBean getAll(){
         return returnBean.success("获取成功",codesService.list());
     }

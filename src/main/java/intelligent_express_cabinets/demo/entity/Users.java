@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("users")
-@ApiModel(value="Users对象", description="")
+@ApiModel(value="Users对象", description="用户")
 public class Users implements Serializable , UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -52,18 +52,17 @@ public class Users implements Serializable , UserDetails {
     @TableField("user_status")
     private Integer userStatus;
 
-    @ApiModelProperty(value = "权限")
+   @ApiModelProperty(value = "角色")
     @TableField(exist = false)
     private List<Roles> roles;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = roles
+        return roles
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
-        return authorities;
     }
 
     @Override
@@ -83,9 +82,6 @@ public class Users implements Serializable , UserDetails {
 
     @Override
     public boolean isEnabled() {
-        if (userStatus==0){
-            return true;
-        }
-        return false;
+        return userStatus == 0;
     }
 }

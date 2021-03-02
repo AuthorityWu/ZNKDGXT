@@ -26,7 +26,7 @@ public class LockersController {
     ILockersService lockersService;
 
     @ApiOperation("获取所有柜机")
-    @GetMapping
+    @GetMapping("")
     public returnBean getAll(){
         List<Lockers> lockersList=lockersService.list();
         return returnBean.success("获取成功",lockersList);
