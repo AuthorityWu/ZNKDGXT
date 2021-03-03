@@ -43,7 +43,7 @@ public class UsersController {
                 userRole.setUserId(userId);
                 userRole.setRoleId(2);
                 boolean bool= userRoleService.save(userRole);
-                if (bool==true){
+                if (bool){
                     return returnBean.success("新用户注册成功!");
                 }
                 else {
@@ -56,7 +56,7 @@ public class UsersController {
 
     @ApiOperation(value = "获取当前登录用户的信息")
     @GetMapping("/user/info")
-    public Users getCustomerInfo(Principal principal){
+    public returnBean getCustomerInfo(Principal principal){
         if(null==principal){
             return null;
         }
@@ -64,7 +64,7 @@ public class UsersController {
         Users users = usersService.getUserByUsername(username);
         users.setRoles(usersService.getRoles(users.getUserId()));
         users.setPassword(null);
-        return users;
+        return returnBean.success("获取成功",users);
     }
 
     @ApiOperation(value = "更新会员的个人信息")
