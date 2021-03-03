@@ -69,9 +69,16 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         return returnBean.success("登录成功",tokenMap);
     }
 
-    @Override
+    /*@Override
     public Users getUserByUsername(String username) {
         return usersMapper.selectOne(new QueryWrapper<Users>().eq("username",username));
+    }*/
+    @Override
+    public Users getUserByUsername(String username) {
+        QueryWrapper<Users> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        return this.getOne(queryWrapper,false);
+        //return usersMapper.selectOne(new QueryWrapper<Users>().eq("username",username));
     }
 
     @Override
