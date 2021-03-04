@@ -15,4 +15,6 @@ public interface ICodesService extends IService<Codes> {
 
     Codes getByBox(Boxes boxes);
 
+    Codes getNotUsed();
+
 }

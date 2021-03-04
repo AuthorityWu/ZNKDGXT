@@ -54,6 +54,65 @@ public class UsersController {
         return returnBean.error("此新用户的账号已经存在!");
     }
 
+
+    @ApiOperation(value = "添加专柜员")
+    @PostMapping("/staff/add")
+    public returnBean staffRegister(@RequestBody Users users){
+        Users user = usersService.getUserByUsername(users.getUsername());
+        if (user==null){
+            //先把用户输入的明文密码进行加密
+            PasswordEncoder pe = new BCryptPasswordEncoder();
+            String encode = pe.encode(users.getPassword());
+            users.setPassword(encode);
+            users.setUserStatus(0);
+            boolean booleans = usersService.save(users);
+            if (booleans){
+                Users user1 = usersService.getUserByUsername(users.getUsername());
+                Integer userId = user1.getUserId();
+                UserRole userRole = new UserRole();
+                userRole.setUserId(userId);
+                userRole.setRoleId(3);
+                boolean bool= userRoleService.save(userRole);
+                if (bool){
+                    return returnBean.success("新用户注册成功!");
+                }
+                else {
+                    return returnBean.error("新用户注册失败!");
+                }
+            }
+        }
+        return returnBean.error("此新用户的账号已经存在!");
+    }
+
+    @ApiOperation(value = "添加管理员")
+    @PostMapping("/admin/add")
+    public returnBean adminRegister(@RequestBody Users users){
+        Users user = usersService.getUserByUsername(users.getUsername());
+        if (user==null){
+            //先把用户输入的明文密码进行加密
+            PasswordEncoder pe = new BCryptPasswordEncoder();
+            String encode = pe.encode(users.getPassword());
+            users.setPassword(encode);
+            users.setUserStatus(0);
+            boolean booleans = usersService.save(users);
+            if (booleans){
+                Users user1 = usersService.getUserByUsername(users.getUsername());
+                Integer userId = user1.getUserId();
+                UserRole userRole = new UserRole();
+                userRole.setUserId(userId);
+                userRole.setRoleId(3);
+                boolean bool= userRoleService.save(userRole);
+                if (bool){
+                    return returnBean.success("新用户注册成功!");
+                }
+                else {
+                    return returnBean.error("新用户注册失败!");
+                }
+            }
+        }
+        return returnBean.error("此新用户的账号已经存在!");
+    }
+
     @ApiOperation(value = "获取当前登录用户的信息")
     @GetMapping("/user/info")
     public returnBean getCustomerInfo(Principal principal){
