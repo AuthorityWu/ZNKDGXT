@@ -48,6 +48,7 @@ public class CodesServiceImpl extends ServiceImpl<CodesMapper, Codes> implements
         else {
             data=new Codes();
             data.setBoxId(0);
+            data.setLockerId(0);
             data.setOrderId(0);
             data.setCodeStatus(1);
             this.save(data);
