@@ -93,7 +93,7 @@ public class OrdersController {
             for (Lockers t : lockers) {
                 try {
                     String addr = gouldUtil.getAMapByLngAndLat(t.getLongitude(), t.getLatitude());
-                    Long longSize = gouldUtil.getDistanceByAddress(address,addr);
+                    long longSize = gouldUtil.getDistanceByAddress(address,addr);
 //                    if (longSize==1 && t.getBoxes().get(0).getBoxStatus()==1){
 //                        //找到对应的快递柜
 //                        lockers1=t;
@@ -174,7 +174,7 @@ public class OrdersController {
     @GetMapping("/getMine")
     public returnBean getOrders(Principal principal){
         if(null==principal){
-            return null;
+            return returnBean.error("没有当前人员信息");
         }
         String username = principal.getName();
         Users users = usersService.getUserByUsername(username);
@@ -190,7 +190,7 @@ public class OrdersController {
     }
 */
     @ApiOperation(value = "获取所有订单")
-    @PostMapping()
+    @GetMapping("")
     public returnBean getAll(){
         List<Orders> ordersList = ordersService.list();
         return returnBean.success("获取所有订单!",ordersList);
