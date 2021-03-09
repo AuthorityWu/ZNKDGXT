@@ -21,8 +21,13 @@ public class LockerTypeController {
     @ApiOperation(value = "从柜机类型新建柜机")
     @PostMapping("/createNewLocker/{lockerTypeId}")
     public returnBean createNewLocker(@PathVariable Integer lockerTypeId,@RequestParam String longitude,@RequestParam String latitude){
-        Lockers lockers=lockerTypeService.createByLockerType(lockerTypeId,longitude,latitude);
-        return returnBean.success("创建成功",lockers);
+        try {
+            Lockers lockers=lockerTypeService.createByLockerType(lockerTypeId,longitude,latitude);
+            return returnBean.success("创建成功",lockers);
+        }catch (Exception e){
+            return returnBean.error("出错",e.getStackTrace());
+        }
+
 
     }
 
@@ -35,9 +40,14 @@ public class LockerTypeController {
     @ApiOperation(value = "通过柜机类型的获取同类柜子")
     @GetMapping("/lockers/{lockerTypeId}")
     public returnBean getLockerByLockerType(@PathVariable Integer lockerTypeId){
-        LockerType lockerType = lockerTypeService.getById(lockerTypeId);
-        List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
-        return returnBean.success("获取成功",lockersList);
+        try {
+            LockerType lockerType = lockerTypeService.getById(lockerTypeId);
+            List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
+            return returnBean.success("获取成功",lockersList);
+        }catch (Exception e){
+            return returnBean.error("此柜机类型不存在");
+        }
+
     }
 
 

@@ -29,7 +29,7 @@ public class MessagesController {
     private IOrdersService ordersService;
 
     @ApiOperation(value = "获取当前会员消息")
-    @GetMapping("/getMine")
+    @GetMapping("/getMyMessage")
     public returnBean getMemberMessages(Principal principal){
         String username = principal.getName();
         Users users = usersService.getUserByUsername(username);
@@ -45,7 +45,7 @@ public class MessagesController {
         }else return returnBean.error("添加消息失败");
     }
 
-    @ApiOperation(value = "根据会员id删除消息信息")
+    @ApiOperation(value = "根据id删除消息信息")
     @DeleteMapping("/delete/{messageId}")
     public returnBean deleteMemberOrder(@PathVariable Integer messageId){
         Messages messages = messagesService.getById(messageId);
@@ -72,7 +72,7 @@ public class MessagesController {
         ordersService.updateById(order);
         return returnBean.success("发送取件失败消息成功!");
     }
-*/
+
     @ApiOperation(value = "获取所有专柜员消息信息")
     @GetMapping("/counter/messages")
     public returnBean getCounterMessages(Principal principal){
@@ -91,4 +91,6 @@ public class MessagesController {
         messagesService.updateById(messages);
         return returnBean.success("删除专柜员消息信息成功!");
     }
+
+ */
 }

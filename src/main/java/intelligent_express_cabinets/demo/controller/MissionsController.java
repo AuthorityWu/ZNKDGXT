@@ -85,4 +85,14 @@ public class MissionsController {
         missionsService.updateById(mission);
         return returnBean.success("完成任务成功!");
     }
+
+    @ApiOperation(value = "添加任务")
+    @PostMapping("/add")
+    public returnBean addMisstions(@RequestBody Missions missions){
+
+        if (missionsService.save(missions)) {
+            return returnBean.success("成功");
+        }else return returnBean.error("失败");
+
+    }
 }

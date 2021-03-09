@@ -44,7 +44,7 @@ public class OrdersController {
     private GouldUtil gouldUtil;
 
     //存取货物码
-    private Integer code;
+    //private Integer codeId;
 
     @ApiOperation(value = "新建订单")
     @PostMapping("/add")
@@ -53,38 +53,39 @@ public class OrdersController {
         orders.setOrderStartTime(LocalDateTime.now());
         String username = principal.getName();
         Users users = usersService.getUserByUsername(username);
-        Integer userId = users.getUserId();
-        orders.setUserId(userId);
-        //订单类型:1.会员寄件 2.快递员派件
+        orders.setUserId(users.getUserId());
+        /* 订单类型:1.会员寄件 2.快递员派件 */
         orders.setOrderType(1);
         //订单状态:1.待存件 2.待取件 3.完成 4.已取消 5.订单不可见（会员删除，管理员可见）0.注销
         orders.setOrderStatus(1);
-        Codes codes = codesService.getByMaxId();
-        code = codes.getCodeId();
-        code = code + 1;
+        Codes codes = codesService.getNotUsed();
+        Integer codeId = codes.getCodeId();
+        //code = code + 1;
         /*
         * （这里应该是寻找可用的code，没有code才新建吧）
         *
         * */
 
-        orders.setOrderCode(code);
+        orders.setOrderCode(codeId);
         if (ordersService.save(orders)){
             Map<String,Integer> orderMap = new HashMap<>();
-            orderMap.put("code",code);
+            orderMap.put("code", codeId);
+            codes.setCodeStatus(2);
             return returnBean.success("新建订单成功!",orderMap);
         }
         return returnBean.error("新建订单失败!");
     }
 
 
-    @ApiOperation(value = "确认存储货物(逻辑可能会修改)")
-    @GetMapping("/thing")
-    public returnBean getThingInfo(){
-        Integer index = 1;
+    @ApiOperation(value = "寻找可存储货物柜机和柜子(逻辑可能会修改)")
+    @GetMapping("/goStore/{orderId}")
+    public returnBean goStore(@PathVariable Integer orderId){
+        Integer isExistBoxNotUsed = 1;
         Integer boxesId = 0;
         Integer locker_boxId = 0;
         Integer lockerId = 0;
-        Orders orders = ordersService.getOrderByCode(code);
+        //Orders orders = ordersService.getOrderByCode(codeId);
+        Orders orders = ordersService.getById(orderId);
         String address = orders.getSendAddress();
         Integer boxSize = orders.getBoxSize();
         Lockers lockers1 = new Lockers();
@@ -122,14 +123,20 @@ public class OrdersController {
             boxesService.updateById(boxes);
 
             //存储码绑定
+            Codes codes=codesService.getById(orders.getOrderCode());
+            codes.setLockerId(lockerId);
+            codes.setBoxId(locker_boxId);
+            codesService.updateById(codes);
+
+            /*
             Codes codes = new Codes();
-            codes.setCodeId(code);
+            codes.setCodeId(codeId);
             codes.setBoxId(locker_boxId);
             codes.setLockerId(lockerId);
             codes.setCodeStatus(2);
             codes.setOrderId(orders.getOrderId());
             codesService.save(codes);
-
+            */
                  //修改一下订单消息
             orders.setOrderStatus(2);
                  //模拟快递公司输入快递员信息
@@ -142,21 +149,21 @@ public class OrdersController {
             Lockers lockers2 = lockersService.getById(lockerId);
             if (orders.getBoxSize()==1 && lockers2.getBigBoxAbleNumber()!=0){
                 lockers2.setBigBoxAbleNumber(lockers2.getBigBoxAbleNumber()-1);
-                index = 0;
+                isExistBoxNotUsed = 0;
                 lockersService.updateById(lockers2);
             }
             else if (orders.getBoxSize()==2 && lockers2.getMiddleBoxAbleNumber()!=0){
                 lockers2.setMiddleBoxAbleNumber(lockers2.getMiddleBoxAbleNumber()-1);
-                index = 0;
+                isExistBoxNotUsed = 0;
                 lockersService.updateById(lockers2);
             }
             else if (orders.getBoxSize()==3 && lockers2.getSmallBoxAbleNumber()!=0){
                 lockers2.setSmallBoxAbleNumber(lockers2.getSmallBoxAbleNumber()-1);
-                index = 0;
+                isExistBoxNotUsed = 0;
                 lockersService.updateById(lockers2);
             }
 
-            if(index==0){
+            if(isExistBoxNotUsed==0){
                 Map<String,Integer> boxMap = new HashMap<>();
                 boxMap.put("boxId",locker_boxId);
                 return returnBean.success("返回符合条件的柜子",boxMap);
@@ -247,7 +254,7 @@ public class OrdersController {
         return returnBean.success("取消订单成功!");
     }
 
-    @ApiOperation(value = "已经取件")
+    @ApiOperation(value = "已经取件,完成订单")
     @PostMapping("/finish/{orderId}")
     public returnBean finishOrders(@PathVariable Integer orderId){
         Orders order = ordersService.getById(orderId);
@@ -265,8 +272,8 @@ public class OrdersController {
         boxes.setBoxStatus(1);
         boxesService.updateById(boxes);
 
-        //设置存储码为0:(状态为解绑)
-        codes.setCodeStatus(0);
+        //设置存储码为1:(状态为可用)
+        codes.setCodeStatus(1);
         codesService.updateById(codes);
         Lockers lockers = lockersService.getById(lockerId);
         Integer locker_type_id = lockers.getLockerTypeId();

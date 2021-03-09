@@ -20,6 +20,7 @@ public class MessagesServiceImpl extends ServiceImpl<MessagesMapper, Messages> i
 
     @Override
     public List<Messages> getMessages(Integer userId) {
+        //return this.getById(userId);
         return messagesMapper.getMessages(userId);
     }
 }
