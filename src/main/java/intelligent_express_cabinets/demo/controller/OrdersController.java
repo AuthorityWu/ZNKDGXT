@@ -76,14 +76,21 @@ public class OrdersController {
         return returnBean.error("新建订单失败!");
     }
 
+    @ApiOperation("更新订单")
+    @PostMapping("/update")
+    public returnBean update(@RequestBody Orders orders){
+        if(ordersService.updateById(orders)){
+            return returnBean.success("成功");
+        }else return returnBean.error("失败");
+    }
 
     @ApiOperation(value = "寻找可存储货物柜机和柜子(逻辑可能会修改)")
     @GetMapping("/goStore/{orderId}")
     public returnBean goStore(@PathVariable Integer orderId){
-        Integer isExistBoxNotUsed = 1;
+        int isExistBoxNotUsed = 1;
         Integer boxesId = 0;
         Integer locker_boxId = 0;
-        Integer lockerId = 0;
+        Integer lockerId;
         //Orders orders = ordersService.getOrderByCode(codeId);
         Orders orders = ordersService.getById(orderId);
         String address = orders.getSendAddress();
