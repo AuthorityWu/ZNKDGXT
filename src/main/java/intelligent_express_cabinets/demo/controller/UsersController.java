@@ -91,10 +91,10 @@ public class UsersController {
                 userRole.setRoleId(3);
                 boolean bool= userRoleService.save(userRole);
                 if (bool){
-                    return returnBean.success("新用户注册成功!");
+                    return returnBean.success("新专柜员用户注册成功!");
                 }
                 else {
-                    return returnBean.error("新用户注册失败!");
+                    return returnBean.error("新专柜员用户注册失败!");
                 }
             }
         }
@@ -120,10 +120,10 @@ public class UsersController {
                 userRole.setRoleId(3);
                 boolean bool= userRoleService.save(userRole);
                 if (bool){
-                    return returnBean.success("新用户注册成功!");
+                    return returnBean.success("新管理员用户注册成功!");
                 }
                 else {
-                    return returnBean.error("新用户注册失败!");
+                    return returnBean.error("新管理员用户注册失败!");
                 }
             }
         }
