@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -54,6 +55,22 @@ public class UsersController {
         return returnBean.error("此新用户的账号已经存在!");
     }
 
+    @ApiOperation(value = "获取所有用户")
+    @GetMapping("/user")
+    public returnBean getAllUser(){
+        List<Users> usersList = usersService.list();
+
+        return returnBean.success("获取成功",usersList);
+
+    }
+
+    @ApiOperation(value = "通过id删除用户")
+    @DeleteMapping("/user/delete/{userId}")
+    public returnBean deleteUserByUserId(@PathVariable Integer userId){
+        if(usersService.removeById(userId)) {
+            return returnBean.success("删除成功");
+        }else return returnBean.error("失败");
+    }
 
     @ApiOperation(value = "添加专柜员")
     @PostMapping("/staff/add")
