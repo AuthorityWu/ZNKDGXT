@@ -45,7 +45,7 @@ public class MessagesController {
         }else return returnBean.error("添加消息失败");
     }
 
-    @ApiOperation(value = "根据id删除消息信息")
+    @ApiOperation(value = "根据id删除消息")
     @DeleteMapping("/delete/{messageId}")
     public returnBean deleteMemberOrder(@PathVariable Integer messageId){
         Messages messages = messagesService.getById(messageId);
@@ -54,6 +54,13 @@ public class MessagesController {
         messagesService.updateById(messages);
         return returnBean.success("删除消息成功!");
     }
+    @ApiOperation(value = "获取所有消息")
+    @GetMapping("")
+    public returnBean getAll(){
+        List<Messages> messagesList = messagesService.list();
+        return returnBean.success("获取成功",messagesList);
+    }
+
 /*
     @ApiOperation(value = "发送取件失败消息")
     @PostMapping("/send/member/{orderId}")
