@@ -25,7 +25,9 @@ public class LockerTypeController {
             Lockers lockers=lockerTypeService.createByLockerType(lockerTypeId,longitude,latitude);
             return returnBean.success("创建成功",lockers);
         }catch (Exception e){
-            return returnBean.error("出错",e.getStackTrace());
+            System.out.println(e.getMessage());
+            return returnBean.error("出错");
+
         }
 
 
@@ -45,6 +47,7 @@ public class LockerTypeController {
             List<Lockers> lockersList = lockerTypeService.getLockerByLockerType(lockerType);
             return returnBean.success("获取成功",lockersList);
         }catch (Exception e){
+            System.out.println(e.getMessage());
             return returnBean.error("此柜机类型不存在");
         }
 
