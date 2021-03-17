@@ -19,8 +19,8 @@ public class RestAuthorizationEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        returnBean bean = returnBean.error("尚未登录，请登录！url:"+request.getRequestURI());
-        bean.setCode(401);
+        returnBean bean = returnBean.error("请求异常！url:"+request.getRequestURI());
+        bean.setCode(404);
         out.write(new ObjectMapper().writeValueAsString(bean));
         out.flush();
         out.close();

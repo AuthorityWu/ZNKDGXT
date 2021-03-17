@@ -56,7 +56,7 @@ public class Users implements Serializable , UserDetails {
     @TableField("user_status")
     private Integer userStatus;
 
-   @ApiModelProperty(value = "角色")
+    @ApiModelProperty(value = "角色",hidden = true)
     @TableField(exist = false)
     private List<Roles> roles;
 

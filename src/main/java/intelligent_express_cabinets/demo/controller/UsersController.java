@@ -117,7 +117,8 @@ public class UsersController {
                 Integer userId = user1.getUserId();
                 UserRole userRole = new UserRole();
                 userRole.setUserId(userId);
-                userRole.setRoleId(3);
+                //设置管理员
+                userRole.setRoleId(1);
                 boolean bool= userRoleService.save(userRole);
                 if (bool){
                     return returnBean.success("新管理员用户注册成功!");
