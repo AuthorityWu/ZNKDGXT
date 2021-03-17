@@ -17,7 +17,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("codes")
-@ApiModel(value="Codes对象", description="")
+@ApiModel(value="Codes对象", description="码")
 public class Codes implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class Codes implements Serializable {
     @TableField("box_id")
     private Integer boxId;
 
-    @ApiModelProperty(value = "状态* int (1.未绑定  2.已绑定  0.解绑定（注销))")
+    @ApiModelProperty(value = "状态* int (1.空闲可用  2.已绑定订单 3已绑定柜子 0不可用")
     @TableField("code_status")
     private Integer codeStatus;
 

@@ -84,7 +84,7 @@ public class OrdersController {
         }else return returnBean.error("失败");
     }
 
-    @ApiOperation(value = "寻找可存储货物柜机和柜子(逻辑可能会修改)")
+    @ApiOperation(value = "寻找可存储货物柜机和柜子(逻辑可能会修改，执行了码柜绑定)")
     @GetMapping("/goStore/{orderId}")
     public returnBean goStore(@PathVariable Integer orderId){
         int isExistBoxNotUsed = 1;
@@ -133,6 +133,8 @@ public class OrdersController {
             Codes codes=codesService.getById(orders.getOrderCode());
             codes.setLockerId(lockerId);
             codes.setBoxId(locker_boxId);
+            //绑定柜子(3)
+            codes.setCodeStatus(3);
             codesService.updateById(codes);
 
             /*
@@ -238,8 +240,8 @@ public class OrdersController {
         boxes.setBoxStatus(1);
         boxesService.updateById(boxes);
 
-        //设置存储码为0:(状态为解绑)
-        codes.setCodeStatus(0);
+        //设置存储码为1:(状态为可用)
+        codes.setCodeStatus(1);
         codesService.updateById(codes);
         Lockers lockers = lockersService.getById(lockerId);
         Integer locker_type_id = lockers.getLockerTypeId();

@@ -19,8 +19,8 @@ public class LockerTypeController {
     ILockerTypeService lockerTypeService;
 
     @ApiOperation(value = "从柜机类型新建柜机")
-    @PostMapping("/createNewLocker/{lockerTypeId}")
-    public returnBean createNewLocker(@PathVariable Integer lockerTypeId,@RequestParam String longitude,@RequestParam String latitude){
+    @PostMapping("/createNewLocker")
+    public returnBean createNewLocker(@RequestParam Integer lockerTypeId,@RequestParam String longitude,@RequestParam String latitude){
         try {
             Lockers lockers=lockerTypeService.createByLockerType(lockerTypeId,longitude,latitude);
             return returnBean.success("创建成功",lockers);

@@ -20,7 +20,10 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     @Override
     public Orders getOrderByCode(Integer code) {
-        return ordersMapper.selectOne(new QueryWrapper<Orders>().eq("order_code",code));
+        QueryWrapper<Orders> queryWrapper=
+                new QueryWrapper<Orders>().eq("order_code",code);
+
+        return this.getOne(queryWrapper,false);
     }
 
     @Override
