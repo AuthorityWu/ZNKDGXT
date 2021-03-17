@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -62,6 +63,7 @@ public class Users implements Serializable , UserDetails {
 
     @Override
     @JsonIgnore
+    @ApiIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles
                 .stream()
@@ -70,21 +72,29 @@ public class Users implements Serializable , UserDetails {
     }
 
     @Override
+    @JsonIgnore
+    @ApiIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
+    @ApiIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
+    @ApiIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
+    @ApiIgnore
     public boolean isEnabled() {
         return userStatus == 0;
     }

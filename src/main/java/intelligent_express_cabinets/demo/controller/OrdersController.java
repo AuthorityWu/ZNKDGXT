@@ -172,6 +172,7 @@ public class OrdersController {
 
             if(isExistBoxNotUsed==0){
                 Map<String,Integer> boxMap = new HashMap<>();
+                boxMap.put("lockerId",lockerId);
                 boxMap.put("boxId",locker_boxId);
                 return returnBean.success("返回符合条件的柜子",boxMap);
             } else{

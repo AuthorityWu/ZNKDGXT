@@ -66,6 +66,18 @@ public class LockersController {
         //return returnBean.success("成功");
     }
 
+    @ApiOperation(value = "柜子报告损坏",notes = "lockerBoxId是柜机中的柜子ID")
+    @PostMapping("/reportBroken")
+    public returnBean reportBroken(@RequestParam Integer lockerId,@RequestParam Integer lockerBoxId){
+        Boxes boxes=boxesService.getByLockerIdLockerBoxId(lockerId,lockerBoxId);
+        //设置不可用（0）
+        boxes.setBoxStatus(0);
+        if(boxesService.updateById(boxes)) {
+            return returnBean.success("成功报告");
+        }
+        else return returnBean.error("失败");
+    }
+
 
 /*
     @ApiOperation("使用柜子")
