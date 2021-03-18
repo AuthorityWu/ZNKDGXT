@@ -10,11 +10,14 @@ import intelligent_express_cabinets.demo.service.IBoxesService;
 import intelligent_express_cabinets.demo.service.ICodesService;
 import intelligent_express_cabinets.demo.service.ILockersService;
 import intelligent_express_cabinets.demo.service.IOrdersService;
+import intelligent_express_cabinets.demo.util.GenerateSequenceUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -52,18 +55,96 @@ public class LockersController {
 
     }
 
-    @ApiOperation(value = "取件(码柜解除绑定)",notes ="会自动调用完成订单操作" )
+    @ApiOperation("存件(执行码柜绑定，返回柜机和其中柜子编号)")
+    @PostMapping("/store")
+    public returnBean store(@RequestParam Integer lockerId, @RequestParam Integer codeId){
+        boolean isExistBoxCanUse = false;
+        Integer boxesId = 0;
+        Integer locker_boxId = 0;
+
+        Codes codes=codesService.getById(codeId);
+        if (codes==null)
+            return returnBean.error("码不存在");
+        Orders orders = ordersService.getOrderByCode(codeId);
+        if(orders==null)
+            return returnBean.error("码尚未绑定订单");
+
+
+        //在柜子列表中寻找符合条件的其中一个柜子
+        try {
+            for (Boxes b : lockersService.getBoxByLockerId(lockerId)){
+                if ( b.getBoxStatus()==1 && b.getBoxSize().equals(orders.getBoxSize())){
+                    boxesId = b.getBoxId();
+                    locker_boxId = b.getLockerBoxId();
+                    isExistBoxCanUse=true;
+                }
+            }
+            if (!isExistBoxCanUse) {
+                return returnBean.error("没有合适的柜子储存!");
+            }
+            //更改对应快递柜中符合条件的柜子的状态（使用中（正常））
+            Boxes boxes = new Boxes();
+            boxes.setBoxId(boxesId);
+            boxes.setBoxStatus(2);
+            boxesService.updateById(boxes);
+
+            //存储码绑定
+            //Codes codes=codesService.getById(codeId);
+
+            codes.setLockerId(lockerId);
+            codes.setBoxId(locker_boxId);
+            //绑定柜子(3)
+            codes.setCodeStatus(3);
+            codesService.updateById(codes);
+
+
+            //修改一下订单消息
+            orders.setOrderStatus(2);
+            //模拟快递公司输入快递员信息
+            orders.setExpressmanTel(GenerateSequenceUtil.generateSequenceNo());
+            orders.setExpressNumber("15847965326");
+            ordersService.updateById(orders);
+
+
+            //修改一下快递柜的柜子数量
+            Lockers lockers2 = lockersService.getById(lockerId);
+            if (orders.getBoxSize()==1 && lockers2.getBigBoxAbleNumber()!=0){
+                lockers2.setBigBoxAbleNumber(lockers2.getBigBoxAbleNumber()-1);
+                //isExistBoxCanUse = 0;
+                lockersService.updateById(lockers2);
+            }
+            else if (orders.getBoxSize()==2 && lockers2.getMiddleBoxAbleNumber()!=0){
+                lockers2.setMiddleBoxAbleNumber(lockers2.getMiddleBoxAbleNumber()-1);
+                //isExistBoxCanUse = 0;
+                lockersService.updateById(lockers2);
+            }
+            else if (orders.getBoxSize()==3 && lockers2.getSmallBoxAbleNumber()!=0){
+                lockers2.setSmallBoxAbleNumber(lockers2.getSmallBoxAbleNumber()-1);
+                //isExistBoxCanUse = 0;
+                lockersService.updateById(lockers2);
+            }
+
+
+            Map<String,Integer> boxMap = new HashMap<>();
+            boxMap.put("lockerId",lockerId);
+            boxMap.put("boxId",locker_boxId);
+            return returnBean.success("返回符合条件的柜子",boxMap);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return returnBean.error("存储货物失败!");
+        }
+    }
+
+
+
+    @ApiOperation(value = "取件(码柜解除绑定,调用完成订单操作)",notes ="会自动调用完成订单操作" )
     @PostMapping("/pickup")
     public returnBean pickup(@RequestParam Integer codeId){
         Orders orders= ordersService.getOrderByCode(codeId);
         return ordersController.finishOrders(orders.getOrderId());
-        //Codes codes=codesService.getById(codeId);
-        //Boxes boxes=boxesService.getByLockerIdLockerBoxId(codes.getLockerId(),codes.getBoxId());
-        //boxes.set
-        //codes.setLockerId(0);
-        //codes.setCodeStatus(1);
-        //codesService.updateById(codes);
-        //return returnBean.success("成功");
+
     }
 
     @ApiOperation(value = "柜子报告损坏",notes = "lockerBoxId是柜机中的柜子ID")

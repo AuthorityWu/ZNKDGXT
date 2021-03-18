@@ -41,18 +41,18 @@ public class CodesServiceImpl extends ServiceImpl<CodesMapper, Codes> implements
     }
 
     public Codes getNotUsed(){
-        QueryWrapper<Codes> queryWrapper=new QueryWrapper<>();
+        /*QueryWrapper<Codes> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("code_status",1).last("LIMIT 1");
         Codes data=this.getOne(queryWrapper);
         if (data!=null)return data;
-        else {
-            data=new Codes();
+        else {*/
+            Codes data=new Codes();
             data.setBoxId(0);
             data.setLockerId(0);
             data.setOrderId(0);
             data.setCodeStatus(1);
             this.save(data);
-        }
+       /* }*/
         return data;
     }
 }
