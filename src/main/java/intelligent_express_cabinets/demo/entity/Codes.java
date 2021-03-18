@@ -23,7 +23,7 @@ public class Codes implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键id")
-    @TableId(value = "code_id")
+    @TableId(value = "code_id", type = IdType.AUTO)
     private Integer codeId;
 
     @ApiModelProperty(value = "订单ID 外键 int")

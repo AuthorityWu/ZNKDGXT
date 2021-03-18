@@ -68,9 +68,12 @@ public class OrdersController {
 
         orders.setOrderCode(codeId);
         if (ordersService.save(orders)){
+            codes.setOrderId(orders.getOrderId());
+            codes.setCodeStatus(2);
+            codesService.updateById(codes);
             Map<String,Integer> orderMap = new HashMap<>();
             orderMap.put("code", codeId);
-            codes.setCodeStatus(2);
+
             return returnBean.success("新建订单成功!",orderMap);
         }
         return returnBean.error("新建订单失败!");

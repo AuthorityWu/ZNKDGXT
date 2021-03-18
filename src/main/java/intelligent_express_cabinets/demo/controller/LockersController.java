@@ -68,7 +68,11 @@ public class LockersController {
         Orders orders = ordersService.getOrderByCode(codeId);
         if(orders==null)
             return returnBean.error("码尚未绑定订单");
-
+        Lockers lockers2 = lockersService.getById(lockerId);
+        if (lockers2==null)
+            return returnBean.error("此柜机不存在");
+        if (lockers2.getLockerStatus()!=1)
+            return returnBean.error("此柜机不能存件");
 
         //在柜子列表中寻找符合条件的其中一个柜子
         try {
@@ -101,13 +105,14 @@ public class LockersController {
             //修改一下订单消息
             orders.setOrderStatus(2);
             //模拟快递公司输入快递员信息
-            orders.setExpressmanTel(GenerateSequenceUtil.generateSequenceNo());
-            orders.setExpressNumber("15847965326");
+            orders.setExpressmanTel("15847965326");
+            orders.setExpressNumber(GenerateSequenceUtil.generateSequenceNo());
             ordersService.updateById(orders);
 
 
             //修改一下快递柜的柜子数量
-            Lockers lockers2 = lockersService.getById(lockerId);
+
+
             if (orders.getBoxSize()==1 && lockers2.getBigBoxAbleNumber()!=0){
                 lockers2.setBigBoxAbleNumber(lockers2.getBigBoxAbleNumber()-1);
                 //isExistBoxCanUse = 0;
@@ -141,10 +146,23 @@ public class LockersController {
 
     @ApiOperation(value = "取件(码柜解除绑定,调用完成订单操作)",notes ="会自动调用完成订单操作" )
     @PostMapping("/pickup")
-    public returnBean pickup(@RequestParam Integer codeId){
+    public returnBean pickup(@RequestParam Integer lockerId, @RequestParam Integer codeId){
+        Codes codes=codesService.getById(codeId);
+        if (codes.getCodeStatus()!=3){
+            return returnBean.error("此码尚未使用");
+        }
+        if(!lockerId.equals(codes.getLockerId())){
+            return returnBean.error("此柜机不是此码绑定柜子的柜机");
+        }
         Orders orders= ordersService.getOrderByCode(codeId);
-        return ordersController.finishOrders(orders.getOrderId());
 
+        //Integer lockerId=codes.getLockerId();
+        Integer lockerBoxId=codes.getBoxId();
+        if(ordersController.finishOrders(orders.getOrderId()).getCode()==200) {
+            Boxes boxes = boxesService.getByLockerIdLockerBoxId(lockerId, lockerBoxId);
+            //Map<String,Integer> boxMap = new HashMap<>();
+            return returnBean.success("成功,返回对应柜子", boxes);
+        }else return returnBean.error("失败");
     }
 
     @ApiOperation(value = "柜子报告损坏",notes = "lockerBoxId是柜机中的柜子ID")
@@ -195,6 +213,19 @@ public class LockersController {
         return returnBean.success("柜子使用成功");
     }
 */
+    @ApiOperation("设置柜机状态(1正常，2暂停存件)")
+    @PostMapping("/setStatus")
+    public returnBean pause(@RequestParam Integer lockerId,@RequestParam Integer status){
+        Lockers lockers = lockersService.getById(lockerId);
+        lockers.setLockerStatus(status);
+        if(lockersService.updateById(lockers)){
+            return returnBean.success("成功");
+        }
+        else return returnBean.error("失败");
+
+
+    }
+
     @ApiOperation("删除柜机（连带删除柜子）")
     @DeleteMapping("/delete/{lockerId}")
     public returnBean delete(@PathVariable Integer lockerId){
@@ -211,5 +242,25 @@ public class LockersController {
             lockersService.delete(lockerId);
             return returnBean.success("删除成功");
         }else return returnBean.error("柜机内仍然有物品，不能执行删除操作");
+    }
+    @ApiOperation("停用柜机")
+    @PostMapping("/stop/{lockerId}")
+    public returnBean stop(@PathVariable Integer lockerId){
+        List<Boxes> boxesList = lockersService.getBoxByLockerId(lockerId);
+        boolean isEmpty=true;
+        for (Boxes boxes :
+                boxesList) {
+            if (boxes.getBoxStatus() == 2) {
+                isEmpty = false;
+                break;
+            }
+        }
+        if (isEmpty){
+            Lockers lockers = lockersService.getById(lockerId);
+            lockers.setLockerStatus(3);
+            lockersService.updateById(lockers);
+            //lockersService.delete(lockerId);
+            return returnBean.success("停用成功");
+        }else return returnBean.error("柜机内仍然有物品，不能执行停用操作");
     }
 }

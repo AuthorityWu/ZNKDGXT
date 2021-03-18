@@ -209,7 +209,7 @@ public class UsersController {
         return returnBean.success("获取成功",users);
     }
 
-    @ApiOperation(value = "更新会员的个人信息")
+    @ApiOperation(value = "更新用户的个人信息")
     @PostMapping ("/user/update")
     public returnBean updateMembers(@RequestBody Users users){
         users.setUsername(null);
