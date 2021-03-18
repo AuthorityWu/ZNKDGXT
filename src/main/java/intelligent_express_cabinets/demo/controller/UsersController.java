@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -72,6 +73,61 @@ public class UsersController {
         return returnBean.success("获取成功",usersList);
 
     }
+
+    @ApiOperation(value = "获取所有管理员")
+    @GetMapping("/admin")
+    public returnBean getAllAdmin(){
+        List<Users> usersList = usersService.list();
+        List<Users> adminList=new ArrayList<>();
+        for (Users users:usersList
+        ) {
+            users.setRoles(usersService.getRoles(users.getUserId()));
+            //是管理员
+            if (!users.getRoles().isEmpty() && users.getRoles().get(0).getRoleId()==1)
+                adminList.add(users);
+        }
+
+        return returnBean.success("获取管理员成功",adminList);
+
+    }
+
+
+    @ApiOperation(value = "获取所有用户(客户)")
+    @GetMapping("/customer")
+    public returnBean getAllCustomer(){
+        List<Users> usersList = usersService.list();
+        List<Users> customerList=new ArrayList<>();
+        for (Users users:usersList
+        ) {
+            users.setRoles(usersService.getRoles(users.getUserId()));
+            //是管理员
+            if (!users.getRoles().isEmpty() && users.getRoles().get(0).getRoleId()==2)
+                customerList.add(users);
+        }
+
+        return returnBean.success("获取管理员成功",customerList);
+
+    }
+
+
+    @ApiOperation(value = "获取所有专柜员")
+    @GetMapping("/staff")
+    public returnBean getAllStaff(){
+        List<Users> usersList = usersService.list();
+        List<Users> staffList=new ArrayList<>();
+        for (Users users:usersList
+        ) {
+            users.setRoles(usersService.getRoles(users.getUserId()));
+            //是管理员
+            if (!users.getRoles().isEmpty() && users.getRoles().get(0).getRoleId()==3)
+                staffList.add(users);
+        }
+
+        return returnBean.success("获取专柜员成功",staffList);
+
+    }
+
+
 
     @ApiOperation(value = "通过id删除用户")
     @DeleteMapping("/user/delete/{userId}")
@@ -144,7 +200,7 @@ public class UsersController {
     @GetMapping("/user/info")
     public returnBean getCustomerInfo(Principal principal){
         if(null==principal){
-            return null;
+            return returnBean.error("没有当前登录人员的信息");
         }
         String username = principal.getName();
         Users users = usersService.getUserByUsername(username);
@@ -156,11 +212,26 @@ public class UsersController {
     @ApiOperation(value = "更新会员的个人信息")
     @PostMapping ("/user/update")
     public returnBean updateMembers(@RequestBody Users users){
+        users.setUsername(null);
+        users.setPassword(null);
         if (usersService.updateById(users)){
-            return returnBean.success("更新成功!");
+            return returnBean.success("除了用户名和密码以外的信息更新成功!");
         }
         return returnBean.error("更新失败!");
     }
 
+    @ApiOperation(value ="当前用户更改密码")
+    @PostMapping("/resetPassword")
+    public returnBean resetPassword(@RequestParam String password,Principal principal){
+        PasswordEncoder pe = new BCryptPasswordEncoder();
+        String encodePassword = pe.encode(password);
+        String username = principal.getName();
+        Users users = usersService.getUserByUsername(username);
+        users.setPassword(encodePassword);
+         if(usersService.updateById(users)){
+             return returnBean.success("成功");
+         }
+        return returnBean.error("失败");
+    }
 
 }
