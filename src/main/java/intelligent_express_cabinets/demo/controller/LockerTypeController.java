@@ -5,6 +5,7 @@ import intelligent_express_cabinets.demo.common.returnBean;
 import intelligent_express_cabinets.demo.entity.LockerType;
 import intelligent_express_cabinets.demo.entity.Lockers;
 import intelligent_express_cabinets.demo.service.ILockerTypeService;
+import intelligent_express_cabinets.demo.service.ILockersService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +18,21 @@ import java.util.List;
 public class LockerTypeController {
     @Autowired
     ILockerTypeService lockerTypeService;
+    @Autowired
+    ILockersService lockersService;
 
     @ApiOperation(value = "从柜机类型新建柜机")
     @PostMapping("/createNewLocker")
     public returnBean createNewLocker(@RequestParam Integer lockerTypeId,@RequestParam String longitude,@RequestParam String latitude){
-        try {
-            Lockers lockers=lockerTypeService.createByLockerType(lockerTypeId,longitude,latitude);
-            return returnBean.success("创建成功",lockers);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return returnBean.error("出错");
+            LockerType lockerType=lockerTypeService.getById(lockerTypeId);
+            if(lockerType!=null) {
+                Lockers lockers = lockerTypeService.createByLockerType(lockerTypeId, longitude, latitude);
+                return returnBean.success("创建成功", lockers);
+            }
+            else
+            return returnBean.error("出错：id 不存在");
 
-        }
+
 
 
     }

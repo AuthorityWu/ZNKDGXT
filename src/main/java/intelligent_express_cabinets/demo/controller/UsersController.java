@@ -4,9 +4,11 @@ package intelligent_express_cabinets.demo.controller;
 import intelligent_express_cabinets.demo.common.returnBean;
 import intelligent_express_cabinets.demo.entity.UserRole;
 import intelligent_express_cabinets.demo.entity.Users;
+import intelligent_express_cabinets.demo.service.IRolesService;
 import intelligent_express_cabinets.demo.service.IUserRoleService;
 import intelligent_express_cabinets.demo.service.IUsersService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ public class UsersController {
 
     @Resource
     private IUserRoleService userRoleService;
+
+    @Autowired
+    IRolesService rolesService;
 
     @ApiOperation(value = "新用户注册")
     @PostMapping("/register")
@@ -59,7 +64,11 @@ public class UsersController {
     @GetMapping("/user")
     public returnBean getAllUser(){
         List<Users> usersList = usersService.list();
+        for (Users users:usersList
+             ) {
+            users.setRoles(usersService.getRoles(users.getUserId()));
 
+        }
         return returnBean.success("获取成功",usersList);
 
     }
